@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="version" content="1.0.0">
+    <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>BAAB | BarneAnestesi & AkuttBehandling - UNDER UTVIKLING</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <meta name="description" content="Building a drug calculator tutorial">
+    <meta name="keywords" content="drug calculator, paediatric">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:title" content="Drug Calculator">
+    <meta property="og:description" content="Building a drug calculator tutorial">
+    <link rel="manifest" href="manifest.json">
+    <script nomodule src="nosupport.js"></script>
+    <script type="module" src="./main.js"></script>
+    <script>
+      if (typeof navigator.serviceWorker !== 'undefined') {
+        navigator.serviceWorker.register('service-worker.js')
+      }
+    </script>
+    <style>
+      html {
+        font-size: 100%;
+        height: 100%;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #000;
+        background: url(bakgrunn.jpg);
+        height: 100%;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+      .full-page{
+        min-height: 100%;
+        position: relative;
+      }
+      main {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+      #body {
+        padding:0px;
+        padding-bottom:3rem;   /* Height of the footer */
+      }
+      a {
+          color: #ccc;
+          text-decoration: none;
+        }
+      footer {
+        display: flex;
+        color: #bbb;
+        background-color: #00000055;
+        padding: 0px 0px;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 3rem;
+        justify-content: center;
+      }
+      .footer-container{
+        display: flex;
+        width: 100%;
+        max-width: 800px;
+      }
+      .footer-text {
+        padding: 1rem 10px 1rem 10px;
+        font-size: .8rem;
+      }
+
+      @media only screen and (max-width: 768px) {
+        html {
+        font-size: 80%;
+      }
+    }
+
+      @media only screen and (max-width: 500px) {
+        html {
+        font-size: 60%;
+      }
+    }
+  
+    </style>
+  </head>
+  <body>
+    <div class="full-page">
+    <main id="body">
+      <calculator-view></calculator-view>
+    </main>
+    <footer>
+      <div class="footer-container">
+      <div class="footer-text">Utviklet av <a href="https://h3design.no">H3Design</a>, basert på <a href="https://github.com/anaestheticsapp/calculator">åpen kildekode</a> av <a href="https://anaesthetics.app/">AnaestheticsApp</a>, under <a href="https://www.isc.org/licenses/">ISC-lisens</a></div>
+      </div>
+    </footer>
+  </div>
+  </body>
+</html>
