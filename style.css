@@ -1,0 +1,117 @@
+html {
+    font-size: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Roboto', 'Segoe UI', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #bbb;
+    background-color: #000;
+    background: url(bakgrunn.jpg);
+    height: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+.full-page {
+    min-height: 100%;
+    position: relative;
+}
+
+main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main.om {
+    flex-direction: column;
+}
+
+#body {
+    padding: 0px;
+    padding-bottom: 3rem;
+    /* Height of the footer */
+}
+
+a {
+    color: #ccc;
+    text-decoration: none;
+}
+
+.om-logo {
+    width: 50%;
+    padding:4rem;
+    align-content: center;
+  }
+
+.om-content {
+    margin: 4rem;
+    max-width: 800px;
+}
+
+.text {
+    padding-bottom: 2rem;
+}
+
+footer {
+    display: flex;
+    background-color: #00000055;
+    padding: 0px 0px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 3rem;
+    justify-content: center;
+}
+
+.footer-container {
+    display: flex;
+    width: 100%;
+    max-width: 800px;
+    align-content: center;
+}
+
+.footer-text {
+    padding: 1rem 10px 1rem 10px;
+    font-size: .8rem;
+    width: 100%;
+}
+
+.footer-text.right {
+    text-align: right;
+}
+
+.footer-text.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#donate-button {
+    height: auto;
+    max-width: 8rem;
+    padding: 0;
+}
+
+.h3d-logo {
+    max-height: 1rem;
+    width: auto;
+    padding: 0 .3rem;
+}
+
+
+@media only screen and (max-width: 768px) {
+    html {
+        font-size: 80%;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    html {
+        font-size: 60%;
+    }
+}
