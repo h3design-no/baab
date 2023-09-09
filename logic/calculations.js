@@ -193,8 +193,8 @@ export function hollidaySegar() {
   hollidaySegar = hsFormula()
   hollidaySegar24 = hollidaySegar / 24
 
-  return [{title: 'Holliday & Segar', dose: hollidaySegar + ' ml/døgn'},
-          {title: 'Hastighet H&S', dose: hollidaySegar24.toFixed(1) + ' ml/t'}];
+  return [{title: 'Plasmalyte Glucos', dose: hollidaySegar + ' ml/døgn'},
+          {title: 'Hastighet', dose: hollidaySegar24.toFixed(1) + ' ml/t'}];
 }
 
 export function burnPercent(hsArray) {
@@ -254,8 +254,8 @@ function formatRange(arr) {
 function formatRangeVolume(arr, dv) {
   let medVolume
   if (dv)
-    if (arr.length == 1) {medVolume = (Number(arr[0].num) + Number(dv)) + ' ml'}
-    else medVolume = (Number(arr[0].num) + Number(dv)) + '-' + (Number(arr[1].num) + Number(dv)) + ' ml';
+    if (arr.length == 1) {medVolume = (Math.round((arr[0].num + Number(dv)) * 100) / 100) + ' ml'}
+    else medVolume = (Math.round((arr[0].num + Number(dv)) * 100) / 100) + '-' + (Math.round((arr[1].num + Number(dv)) * 100) / 100) + ' ml';
   else
     if (arr.length == 1) {medVolume = Math.round( arr[0].num * 100) / 100 + ' ml'}
     else medVolume = arr[0].num + '-' + arr[1].num + ' ml';

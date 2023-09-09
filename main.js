@@ -19,13 +19,13 @@ const CEFUROXIM = { name: 'Cefuroxim', conc: [100], unit: 'mg/ml', formula: [500
 const CORDARONE1 = { name: 'Cordarone', conc: [50], unit: 'mg/ml', formula: [5000], max: [300000] };
 const CORDARONE2 = { name: 'Cordarone', conc: [50], unit: 'mg/ml', formula: [5000], max: [150000] };
 const CYCLOCAPRON = { name: 'Cyclocapron', conc: [100], unit: 'mg/ml', formula: [15000], max: [1500000] };
-const DEXDOR_N = { name: 'Dexdor (nasal)', conc: [.1], unit: 'mg/ml', formula: [2, 4], max: [200], dv: [.1] };
+const DEXDOR_N = { name: 'Dexdor (nasal)*', conc: [.1], unit: 'mg/ml', formula: [2, 4], max: [200], dv: [.1] };
 const DIAZEPAM = { name: 'Diazepam', conc: [5], unit: 'mg/ml', formula: [100], class: 'benzo' };
 const FENTANYL = { name: 'Fentanyl', conc: [.05], unit: 'mg/ml', formula: [1, 2], max: [200], class: 'opioid', text: 'Bivirkninger: respirasjondepresjon'};
 const FIBRINOGEN = { name: 'Fibrinogen', conc: [20], unit: 'mg/ml', formula: [35000, 70000], max: [5000000] };
 const IBUPROFEN = { name: 'Ibuprofen', conc: [10], unit: 'mg/ml', formula: [5000, 7000], max: [400000] };
 const KETAMIN = { name: 'Ketamin', conc: [10], unit: 'mg/ml', formula: [1000, 2000], class: 'sedative' };
-const KETAMIN_N = { name: 'Ketamin (nasal)', conc: [50], unit: 'mg/ml', formula: [1000, 1500], class: 'sedative', dv: [.1] };
+const KETAMIN_N = { name: 'Ketamin (nasal)*', conc: [50], unit: 'mg/ml', formula: [1000, 1500], class: 'sedative', dv: [.1] };
 const LIDOCAIN = { name: 'Lidocain', conc: [10], unit: 'mg/ml', formula: [3000, 7000], class: 'local' };
 const METRONIDAZOLE = { name: 'Metronidazole', unit: 'mg/ml', conc: [5], formula: [7500], max: [1500000] };
 const MIDAZOLAM = { name: 'Midazolam', conc: [1], unit: 'mg/ml', formula: [50, 100], class: 'benzo' };
@@ -66,6 +66,7 @@ class CalculatorView extends LitElement {
     this._calculations = [];
     this._vitals = [];
     this._airwayOverview = [];
+    this._fluids = [];
     this._eliminations = [];
     this._acuteDrugs = [];
     this._cpr = [];
@@ -265,6 +266,11 @@ class CalculatorView extends LitElement {
       ...calc.shockEnergy()
     ];
 
+    this._fluids = [
+      { title: 'Basalt væskebehov', dose: 'Holliday & Segar :', class: '' },
+      ...calc.hollidaySegar()
+    ];
+
     this._eliminations = [
       ...calc.urineProduction(),
       ...calc.urineVolume(),
@@ -440,6 +446,7 @@ class CalculatorView extends LitElement {
       ${this._calculations.length === 0
         ? html`
              <img class="logo" src="logo.svg">
+            <div class="label">UNDER UTVIKLING - BRUK MED VARSOMHET</div>
             <div class="label">Velg alder, vekt og eventuelt % 2. og 3. grads forbrenning over (vekt estimeres hvis ikke oppgitt)</div>
             <div class="label">-> Trykk på blå knapp for å kalkulere (alle verdier kan oppdateres senere) </div>
             <div class="label">Dette er kun et hjelpemiddel. Oppgitte verdier er veiledende, og feil kan forekomme</div>
@@ -494,7 +501,17 @@ class CalculatorView extends LitElement {
                   `;
         })}
               </output>
-
+          
+              <output class="flex">
+                ${this._fluids.map(item => {
+          return html`
+                    <figure class="${item.class}">
+                      <figcaption>${item.title}</figcaption>
+                      <span>${item.dose}</span>
+                    </figure>
+                  `;
+        })}
+        </output>
               <output class="flex">
                 ${this._eliminations.map(item => {
           return html`
@@ -682,8 +699,10 @@ class CalculatorView extends LitElement {
             `
         : ''
       }
-  </div>
+      <div>* Doseringsvolum for nasal administrasjon er oppgitt inkludert dødvolum på 0,1 ml </div>
 
+  </div>
+  
   `;
   }
   static get styles() {
