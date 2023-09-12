@@ -36,8 +36,10 @@ const PARACETAMOL = { name: 'Paracetamol', conc: [10], unit: 'mg/ml', formula: [
 const PROPOFOL = { name: 'Propofol', conc: [10], unit: 'mg/ml', formula: [3000, 5000], class: 'sedative' };
 const ROCURONIUM = { name: 'Rocuronium', conc: [10], unit: 'mg/ml', formula: [600, 1200], max: [100000], class: 'nmbd' };
 const ROBINUL = { name: 'Robinul', conc: [.2], unit: 'mg/ml', formula: [10], max: [400], class: 'antimuscarinic' };
+const ROBINUL_NEOSTIGMIN = { name: 'Robinul/Neostigmin 0.5 /', conc: [2.5], unit: 'mg/ml', formula: [50], max: [5000], class: 'antinmbd' };
 const SUXAMETHONIUM = { name: 'Suxamethonium', conc: [10], unit: 'mg/ml', formula: [1000, 2000], max: [100000], class: 'nmbd' };
 const THIOPENTAL = { name: 'Thiopental', conc: [25], unit: 'mg/ml', formula: [5000, 8000], class: 'sedative' };
+const VECURONIUM = { name: 'Vecuronium', conc: [2], unit: 'mg/ml', formula: [100], max: [100000], class: 'nmbd' };
 
 
 ///////////////////////////////////////////
@@ -293,6 +295,8 @@ class CalculatorView extends LitElement {
       calc.drug(THIOPENTAL),
       calc.drug(SUXAMETHONIUM),
       calc.drug(ROCURONIUM),
+      calc.drug(VECURONIUM),
+      calc.drug(ROBINUL_NEOSTIGMIN),
       calc.drug(FENTANYL),
       calc.drug(ALFENTANIL),
       calc.drug(PARACETAMOL),
@@ -367,6 +371,8 @@ class CalculatorView extends LitElement {
       calc.drug(THIOPENTAL),
       calc.drug(SUXAMETHONIUM),
       calc.drug(ROCURONIUM),
+      calc.drug(VECURONIUM),
+      calc.drug(ROBINUL_NEOSTIGMIN),
       calc.drug(FENTANYL),
       calc.drug(ALFENTANIL),
       calc.drug(ORAMORPH),
@@ -450,6 +456,7 @@ class CalculatorView extends LitElement {
             <div class="label">Velg alder, vekt og eventuelt % 2. og 3. grads forbrenning over (vekt estimeres hvis ikke oppgitt)</div>
             <div class="label">-> Trykk på blå knapp for å kalkulere (alle verdier kan oppdateres senere) </div>
             <div class="label">Dette er kun et hjelpemiddel. Oppgitte verdier er veiledende, og feil kan forekomme</div>
+            <div class="label"><a href="om.html">Se her for hjelp til å installere som en app</a></div>
           `
         : ''
       }
@@ -743,8 +750,8 @@ class CalculatorView extends LitElement {
         #age-slider::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
-          width: 25px;
-          height: 25px;
+          width: 30px;
+          height: 30px;
           border-radius: 50%; 
           background: #3399ff;
           cursor: pointer;
@@ -986,6 +993,10 @@ class CalculatorView extends LitElement {
         }
         .drug-label.nmbd {
           background-color: #ef5350bb;
+        }
+        .drug-label.antinmbd {
+          background: rgb(239,83,80);
+background: linear-gradient(157deg, rgba(239,83,80,0.73) 9%, rgba(255,255,255,0.73) 9%, rgba(255,255,255,0.73) 26%, rgba(239,83,80,0.73) 26%, rgba(239,83,80,0.73) 42%, rgba(255,255,255,0.73) 42%, rgba(255,255,255,0.73) 59%, rgba(239,83,80,0.73) 59%, rgba(239,83,80,0.73) 74%, rgba(255,255,255,0.73) 74%, rgba(255,255,255,0.73) 91%, rgba(239,83,80,0.73) 91%);
         }
         .drug-label.opioid {
           background-color: #90caf9bb;
