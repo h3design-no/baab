@@ -166,8 +166,8 @@ export function bloodProd() {
   formula: 'TBC: ' + plater + ' ml' };
 }
 export function bloodMassive() {
-  const sagM = _weight * 10 > 250 ? 250 : _weight * 10;
-  const plasmaM = _weight * 10 > 200 ? 200 : _weight * 10;
+  const sagM = _weight * 10;
+  const plasmaM = _weight * 10;
   const platerM = _weight * 5 > 350 ? 350 : _weight * 5;
   return { title: 'Blod MTP', dose: 'SAG: ' + sagM + ' ml', 
   dose_volume: 'Plasma: ' + plasmaM + ' ml', 
