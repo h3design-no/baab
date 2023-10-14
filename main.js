@@ -1,7 +1,7 @@
 //import './views/calculator-view.js';
 
-import { LitElement, html, css } from 'https://unpkg.com/@polymer/lit-element@latest/lit-element.js?module';
-import { classMap } from 'https://unpkg.com/lit-html/directives/class-map.js?module';
+import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js';
+// import { classMap } from 'https://cdn.jsdelivr.net/gh/lit/dist@3.0.0/all/lit-all.min.js.map';
 //import { LitElement, html, css } from 'lit-element';
 //import { classMap } from 'lit-html/directives/class-map.js';
 
