@@ -11,11 +11,12 @@ import * as calc from './logic/calculations.js';
 const ADRENALIN = { name: 'Adrenalin', conc: [.01], unit: 'mg/ml', formula: [1], class: 'vaso' };
 const ADRENALIN_STANS = { name: 'Adrenalin', conc: [.1], unit: 'mg/ml', formula: [10], max: [1000], class: 'vaso' };
 const ALFENTANIL = { name: 'Alfentanil', conc: [.5], unit: 'mg/ml', formula: [10, 20], class: 'opioid' };
-const ATROPIN = { name: 'Atropin', conc: [1], unit: 'mg/ml', formula: [20], max: [1000], class: 'antimuscarinic' };
+const ATROPIN = { name: 'Atropin', conc: [1], unit: 'mg/ml', formula: [10, 20], max: [1000], class: 'antimuscarinic' };
 const BENPEN = { name: 'Benpen', conc: [10], unit: 'mg/ml', formula: [25000], max: [1200000] };
-const BUPIVACAIN = { name: 'Bupivacain', conc: [5], unit: 'mg/ml', formula: [2500], class: 'local' };
+const BUPIVACAIN = { name: 'Bupivacain', conc: [2.5], unit: 'mg/ml', formula: [2000], class: 'local' };
 const CALCIUMGLUKONAT = { name: 'Calciumglukonat', conc: [.225], unit: 'mmol/ml', formula: [100], max: [4500] };
 const CEFUROXIM = { name: 'Cefuroxim', conc: [100], unit: 'mg/ml', formula: [50000], max: [1500000] };
+const CISATRACURIUM = { name: 'Vecuronium', conc: [2], unit: 'mg/ml', formula: [150], max: [100000], class: 'nmbd' };
 const CORDARONE1 = { name: 'Cordarone', conc: [50], unit: 'mg/ml', formula: [5000], max: [300000] };
 const CORDARONE2 = { name: 'Cordarone', conc: [50], unit: 'mg/ml', formula: [5000], max: [150000] };
 const CYCLOCAPRON = { name: 'Cyclocapron', conc: [100], unit: 'mg/ml', formula: [15000], max: [1500000] };
@@ -23,7 +24,8 @@ const DEXDOR_N = { name: 'Dexdor (nasal)*', conc: [.1], unit: 'mg/ml', formula: 
 const DIAZEPAM = { name: 'Diazepam', conc: [5], unit: 'mg/ml', formula: [100], class: 'benzo' };
 const FENTANYL = { name: 'Fentanyl', conc: [.05], unit: 'mg/ml', formula: [1, 2], max: [200], class: 'opioid', text: 'Bivirkninger: respirasjondepresjon'};
 const FIBRINOGEN = { name: 'Fibrinogen', conc: [20], unit: 'mg/ml', formula: [35000, 70000], max: [5000000] };
-const IBUPROFEN = { name: 'Ibuprofen', conc: [10], unit: 'mg/ml', formula: [5000, 7000], max: [400000] };
+const GLYCOPYRRON = { name: 'Glycopyrron', conc: [.2], unit: 'mg/ml', formula: [5, 10], max: [400], class: 'antimuscarinic' };
+const IBUPROFEN = { name: 'Ibuprofen', conc: [10], unit: 'mg/ml', formula: [6000, 10000], max: [400000] };
 const KETAMIN = { name: 'Ketamin', conc: [10], unit: 'mg/ml', formula: [1000, 2000], class: 'sedative' };
 const KETAMIN_N = { name: 'Ketamin (nasal)*', conc: [50], unit: 'mg/ml', formula: [1000, 1500], class: 'sedative', dv: [.1] };
 const LIDOCAIN = { name: 'Lidocain', conc: [10], unit: 'mg/ml', formula: [3000, 7000], class: 'local' };
@@ -35,7 +37,6 @@ const ORAMORPH = { name: 'Oramorph', conc: [10], unit: 'mg/ml', formula: [20, 40
 const PARACETAMOL = { name: 'Paracetamol', conc: [10], unit: 'mg/ml', formula: [10000, 15000] };
 const PROPOFOL = { name: 'Propofol', conc: [10], unit: 'mg/ml', formula: [3000, 5000], class: 'sedative' };
 const ROCURONIUM = { name: 'Rocuronium', conc: [10], unit: 'mg/ml', formula: [600, 1200], max: [100000], class: 'nmbd' };
-const ROBINUL = { name: 'Robinul', conc: [.2], unit: 'mg/ml', formula: [10], max: [400], class: 'antimuscarinic' };
 const ROBINUL_NEOSTIGMIN = { name: 'Robinul/Neostigmin 0.5 /', conc: [2.5], unit: 'mg/ml', formula: [50], max: [5000], class: 'antinmbd' };
 const SUXAMETHONIUM = { name: 'Suxamethonium', conc: [10], unit: 'mg/ml', formula: [1000, 2000], max: [100000], class: 'nmbd' };
 const THIOPENTAL = { name: 'Thiopental', conc: [25], unit: 'mg/ml', formula: [5000, 8000], class: 'sedative' };
@@ -296,6 +297,7 @@ class CalculatorView extends LitElement {
       calc.drug(SUXAMETHONIUM),
       calc.drug(ROCURONIUM),
       calc.drug(VECURONIUM),
+      calc.drug(CISATRACURIUM),
       calc.drug(ROBINUL_NEOSTIGMIN),
       calc.drug(FENTANYL),
       calc.drug(ALFENTANIL),
@@ -303,7 +305,7 @@ class CalculatorView extends LitElement {
       calc.drug(IBUPROFEN),
       calc.drug(DIAZEPAM),
       calc.drug(MIDAZOLAM),
-      calc.drug(ROBINUL),
+      calc.drug(GLYCOPYRRON),
       calc.drug(ATROPIN),
       calc.drug(ADRENALIN),
       calc.drug(ONDANSETRON),
@@ -316,7 +318,7 @@ class CalculatorView extends LitElement {
     ];
 
     this._acuteDrugs = [
-      calc.bloodMassive(),
+      calc.bloodProd(),
       calc.drug(CYCLOCAPRON),
       calc.drug(CALCIUMGLUKONAT),
       calc.drug(FIBRINOGEN),
@@ -350,6 +352,7 @@ class CalculatorView extends LitElement {
     this._burnDrugs = [
       calc.drug(PROPOFOL),
       calc.drug(KETAMIN),
+      calc.drug(KETAMIN_N),
       calc.drug(THIOPENTAL),
       calc.drug(SUXAMETHONIUM),
       calc.drug(ROCURONIUM),
