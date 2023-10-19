@@ -31,8 +31,8 @@ const HOSTNAME_WHITELIST = [
     event.waitUntil(
       caches.open('pwa-cache').then((cache) => {
         return cache.addAll([
-          'https://unpkg.com/@polymer/lit-element@latest/lit-element.js',
-          'https://unpkg.com/lit-html/directives/class-map.js',
+          'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js',
+          'https://cdn.jsdelivr.net/gh/lit/dist@3.0.0/all/lit-all.min.js.map',
         ]);
       })
     );
