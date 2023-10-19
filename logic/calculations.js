@@ -242,7 +242,7 @@ function formatNumberVolume(num, decimals = 2) {
 function formatRange(arr) {
   if (arr.length == 1) return arr[0].num + arr[0].unit;
   else if (arr[0].unit == arr[1].unit) return arr[0].num + '-' + arr[1].num + arr[1].unit;
-  else return arr[0].num + arr[0].unit + '-' + arr[1].num + arr[1].unit;
+  else return (arr[0].num / 1000) + '-' + arr[1].num + arr[1].unit;
 }
 function formatRangeVolume(arr, dv) {
   let medVolume
