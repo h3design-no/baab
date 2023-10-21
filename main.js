@@ -13,28 +13,34 @@ const ADRENALIN_STANS = { name: 'Adrenalin', conc: [.1], unit: 'mg/ml', formula:
 const ALFENTANIL = { name: 'Alfentanil', conc: [.5], unit: 'mg/ml', formula: [10, 20], class: 'opioid' };
 const ATROPIN = { name: 'Atropin', conc: [1], unit: 'mg/ml', formula: [10, 20], max: [1000], class: 'antimuscarinic' };
 const BENPEN = { name: 'Benpen', conc: [10], unit: 'mg/ml', formula: [25000], max: [1200000] };
+const BRIDION = { name: 'Bridion', conc: [100], unit: 'mg/ml', formula: [2000, 4000], max: [1200000], class: 'antinmbd' };
 const BUPIVACAIN = { name: 'Bupivacain', conc: [2.5], unit: 'mg/ml', formula: [2000], class: 'local' };
 const CALCIUMGLUKONAT = { name: 'Calciumglukonat', conc: [.225], unit: 'mmol/ml', formula: [100], max: [4500] };
+const CEFAZOLIN = { name: 'Cefazolin', conc: [100], unit: 'mg/ml', formula: [30000], max: [2000000] };
 const CEFUROXIM = { name: 'Cefuroxim', conc: [100], unit: 'mg/ml', formula: [50000], max: [1500000] };
-const CISATRACURIUM = { name: 'Vecuronium', conc: [2], unit: 'mg/ml', formula: [150], max: [100000], class: 'nmbd' };
+const CISATRACURIUM = { name: 'Cisatracurium', conc: [2], unit: 'mg/ml', formula: [150], max: [100000], class: 'nmbd' };
 const CORDARONE1 = { name: 'Cordarone', conc: [50], unit: 'mg/ml', formula: [5000], max: [300000] };
 const CORDARONE2 = { name: 'Cordarone', conc: [50], unit: 'mg/ml', formula: [5000], max: [150000] };
 const CYCLOCAPRON = { name: 'Cyclocapron', conc: [100], unit: 'mg/ml', formula: [15000], max: [1500000] };
+const DEKSAMETASON = { name: 'Deksametason', conc: [4], unit: 'mg/ml', formula: [200, 400], max: [12000], dv: [.1] };
 const DEXDOR_N = { name: 'Dexdor (nasal)*', conc: [.1], unit: 'mg/ml', formula: [2, 4], max: [200], dv: [.1] };
 const DIAZEPAM = { name: 'Diazepam', conc: [5], unit: 'mg/ml', formula: [100], class: 'benzo' };
 const FENTANYL = { name: 'Fentanyl', conc: [.05], unit: 'mg/ml', formula: [1, 2], max: [200], class: 'opioid', text: 'Bivirkninger: respirasjondepresjon'};
 const FIBRINOGEN = { name: 'Fibrinogen', conc: [20], unit: 'mg/ml', formula: [35000, 70000], max: [5000000] };
 const GLYCOPYRRON = { name: 'Glycopyrron', conc: [.2], unit: 'mg/ml', formula: [5, 10], max: [400], class: 'antimuscarinic' };
-const IBUPROFEN = { name: 'Ibuprofen', conc: [10], unit: 'mg/ml', formula: [6000, 10000], max: [400000] };
+const IBUPROFEN = { name: 'Ibuprofen', conc: [10], unit: 'mg/ml', formula: [6000, 10000], max: [400000], age_limit: [6] };
 const KETAMIN = { name: 'Ketamin', conc: [10], unit: 'mg/ml', formula: [1000, 2000], class: 'sedative' };
 const KETAMIN_N = { name: 'Ketamin (nasal)*', conc: [50], unit: 'mg/ml', formula: [1000, 1500], class: 'sedative', dv: [.1] };
+const KETOROLAK = { name: 'Ketorolak', conc: [30], unit: 'mg/ml', formula: [500, 600], max: [30000], age_limit: [12] };
+const KLONIDIN = { name: 'Klonidin', conc: [.015], unit: 'mg/ml', formula: [1], max: [75] };
 const LIDOCAIN = { name: 'Lidocain', conc: [10], unit: 'mg/ml', formula: [3000, 7000], class: 'local' };
 const METRONIDAZOLE = { name: 'Metronidazole', unit: 'mg/ml', conc: [5], formula: [7500], max: [1500000] };
 const MIDAZOLAM = { name: 'Midazolam', conc: [1], unit: 'mg/ml', formula: [50, 100], class: 'benzo' };
 const NACL = { name: 'NaCl', conc: [1], unit: 'mmol/ml', formula: [2000], type: 'liquid' };
-const ONDANSETRON = { name: 'Ondansetron', conc: [2], unit: 'mg/ml', formula: [100], max: [4000] };
+const ONDANSETRON = { name: 'Ondansetron', conc: [2], unit: 'mg/ml', formula: [150], max: [4000] };
 const ORAMORPH = { name: 'Oramorph', conc: [10], unit: 'mg/ml', formula: [20, 40], class: 'opioid' };
 const PARACETAMOL = { name: 'Paracetamol', conc: [10], unit: 'mg/ml', formula: [10000, 15000] };
+const PARECOXIB = { name: 'Parecoxib', conc: [10], unit: 'mg/ml', formula: [1000], max: [40000], age_limit: [12] };
 const PROPOFOL = { name: 'Propofol', conc: [10], unit: 'mg/ml', formula: [3000, 5000], class: 'sedative' };
 const ROCURONIUM = { name: 'Rocuronium', conc: [10], unit: 'mg/ml', formula: [600, 1200], max: [100000], class: 'nmbd' };
 const ROBINUL_NEOSTIGMIN = { name: 'Robinul/Neostigmin 0.5 /', conc: [2.5], unit: 'mg/ml', formula: [50], max: [5000], class: 'antinmbd' };
@@ -223,7 +229,7 @@ class CalculatorView extends LitElement {
     } 
 
     if (this._estWeight >= 70) this._estWeight = 70;
-    console.log('estWeight', this._estWeight);
+    // console.log('estWeight', this._estWeight);
 
     const months = parseInt(e.target.value);
     let ageText = "";
@@ -244,11 +250,14 @@ class CalculatorView extends LitElement {
     e.preventDefault();
 
     const formData = new FormData(e.target);
+    const months = formData.get('age');
     const age = formData.get('age') / 12;
     const weight = formData.get('weight') ? formData.get('weight') : this._estWeight;
     const burnPercent = formData.get('burn')
+    console.log(months)
 
     calc.setAge(age);
+    calc.ageMonths(months);
     calc.setWeight(weight);
     calc.setBurnPercent(burnPercent);
 
@@ -303,14 +312,19 @@ class CalculatorView extends LitElement {
       calc.drug(ALFENTANIL),
       calc.drug(PARACETAMOL),
       calc.drug(IBUPROFEN),
+      calc.drug(PARECOXIB),
+      calc.drug(KETOROLAK),
       calc.drug(DIAZEPAM),
       calc.drug(MIDAZOLAM),
       calc.drug(GLYCOPYRRON),
       calc.drug(ATROPIN),
       calc.drug(ADRENALIN),
+      calc.drug(KLONIDIN),
+      calc.drug(DEKSAMETASON),
       calc.drug(ONDANSETRON),
       calc.drug(CEFUROXIM),
       calc.drug(METRONIDAZOLE),
+      calc.drug(CEFAZOLIN),
       calc.drug(BENPEN),
       calc.drug(LIDOCAIN),
       calc.drug(BUPIVACAIN),
@@ -375,7 +389,9 @@ class CalculatorView extends LitElement {
       calc.drug(SUXAMETHONIUM),
       calc.drug(ROCURONIUM),
       calc.drug(VECURONIUM),
+      calc.drug(CISATRACURIUM),
       calc.drug(ROBINUL_NEOSTIGMIN),
+      calc.drug(BRIDION),
       calc.drug(FENTANYL),
       calc.drug(ALFENTANIL),
       calc.drug(ORAMORPH),
@@ -383,10 +399,12 @@ class CalculatorView extends LitElement {
       calc.drug(IBUPROFEN),
       calc.drug(DIAZEPAM),
       calc.drug(MIDAZOLAM),
-      calc.drug(ROBINUL),
+      calc.drug(GLYCOPYRRON),
       calc.drug(ATROPIN),
       calc.drug(ADRENALIN),
+      calc.drug(DEKSAMETASON),
       calc.drug(ONDANSETRON),
+      calc.drug(CEFAZOLIN),
       calc.drug(CEFUROXIM),
       calc.drug(METRONIDAZOLE),
       calc.drug(BENPEN),
@@ -457,7 +475,7 @@ class CalculatorView extends LitElement {
              <img class="logo" src="logo.svg">
             <div class="label">UNDER UTVIKLING - BRUK MED VARSOMHET</div>
             <div class="label">Velg alder, vekt og eventuelt % 2. og 3. grads forbrenning over (vekt estimeres hvis ikke oppgitt)</div>
-            <div class="label">-> Trykk på blå knapp for å kalkulere (alle verdier kan oppdateres senere) </div>
+            <div class="label">-> Trykk på den blå knappen for å kalkulere (alle verdier kan oppdateres senere) </div>
             <div class="label">Dette er kun et hjelpemiddel. Oppgitte verdier er veiledende, og feil kan forekomme</div>
             <div class="label"><a href="om.html">Se her for hjelp til å installere som en app</a></div>
           `

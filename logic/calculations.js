@@ -1,9 +1,13 @@
 let _weight;
 let _age;
+let _age_months;
 let _burnPercent
 
 export function setAge(age) {
   _age = age;
+}
+export function ageMonths(age) {
+  _age_months = age;
 }
 export function setWeight(weight) {
   _weight = weight;
@@ -256,10 +260,19 @@ function formatRangeVolume(arr, dv) {
  
 }
 export function drug(opts) {
+  const age_limit = Number(opts.age_limit)
   const name = opts.name
   const unit = opts.unit
   const type = opts.type ? opts.type : 'solid';
   const dv = opts.dv
+  if (_age_months < age_limit) {
+    return {
+      title: name + ' ' + opts.conc + ' ' + unit,
+      dose: 'Nedre aldrsgrense:',
+      dose_volume: age_limit + ' måneder'
+    };
+  }
+  else {
   const dose = opts.formula.map(value => {
     const calc = value * _weight;
     const result = opts.max && calc > opts.max ? opts.max : calc;
@@ -279,5 +292,5 @@ export function drug(opts) {
     dose_volume: formatRangeVolume(dose_volume, dv),
     formula: formatRange(formula) + '/kg',
     class: opts.class || 'default',
-  };
+  };};
 }
