@@ -245,17 +245,28 @@ function formatNumberVolume(num, decimals = 2) {
 }
 function formatRange(arr) {
   if (arr.length == 1) return arr[0].num + arr[0].unit;
-  else if (arr[0].unit == arr[1].unit) return arr[0].num + '-' + arr[1].num + arr[1].unit;
-  else return (arr[0].num / 1000) + '-' + arr[1].num + arr[1].unit;
+  else if (arr[0].unit == arr[1].unit) return arr[0].num + ' - ' + arr[1].num + arr[1].unit;
+  else return (arr[0].num / 1000) + ' - ' + arr[1].num + arr[1].unit;
 }
-function formatRangeVolume(arr, dv) {
+function formatRangeVolume(arr, dec, dv, weight) {
   let medVolume
+  let r_num
+  if (Number(dec) === 0) {
+    r_num = 1
+  } else if (Number(dec) === 2) {
+    r_num = 100
+  } else {
+    r_num = 10
+  }
+  if (weight <= 5) {
+    r_num > 10 ? 100 : r_num *= 10
+  } 
   if (dv)
     if (arr.length == 1) {medVolume = (Math.round((arr[0].num + Number(dv)) * 100) / 100) + ' ml'}
-    else medVolume = (Math.round((arr[0].num + Number(dv)) * 100) / 100) + '-' + (Math.round((arr[1].num + Number(dv)) * 100) / 100) + ' ml';
+    else medVolume = (Math.round((arr[0].num + Number(dv)) * 100) / 100) + ' - ' + (Math.round((arr[1].num + Number(dv)) * 100) / 100) + ' ml';
   else
-    if (arr.length == 1) {medVolume = Math.round( arr[0].num * 100) / 100 + ' ml'}
-    else medVolume = arr[0].num + '-' + arr[1].num + ' ml';
+    if (arr.length == 1) {medVolume = Math.round( arr[0].num * r_num) / r_num + ' ml'}
+    else medVolume = Math.round( arr[0].num * r_num) / r_num + ' - ' + Math.round( arr[1].num * r_num) / r_num + ' ml';
   return medVolume
  
 }
@@ -264,6 +275,7 @@ export function drug(opts) {
   const name = opts.name
   const unit = opts.unit
   const type = opts.type ? opts.type : 'solid';
+  const dec = opts.dec
   const dv = opts.dv
   if (_age_months < age_limit) {
     return {
@@ -289,7 +301,7 @@ export function drug(opts) {
   return {
     title: name + ' ' + opts.conc + ' ' + unit,
     dose: formatRange(dose),
-    dose_volume: formatRangeVolume(dose_volume, dv),
+    dose_volume: formatRangeVolume(dose_volume, dec, dv, _weight),
     formula: formatRange(formula) + '/kg',
     class: opts.class || 'default',
   };};
