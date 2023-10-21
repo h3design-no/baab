@@ -432,31 +432,37 @@ class CalculatorView extends LitElement {
         <div  class="awb-input">
           <div class="slider">
           <div class="labels">
-            <label for="age">Alder</label><output id="age-output">3 år</output>
-          </div>
-            <div class="slider-container">
-              <input type="range" name="age" id="age-slider" min="0" max="216" step="1" value='36'  @input="${this._updateEstimatedWeight}">
-              
-            </div>
-          </div>
-          <section>
-          <div>
-            <label for="weight">Vekt i kg</label>
+            <div class="age-display">
+
+            <label for="age">Alder:</label><output id="age-output">3 år</output>
+  </div>
+  <div class="wbi">
+            <label for="weight">Vekt i kg:</label>
             <input
               type="number"
               name="weight"
               placeholder="~${this._estWeight || ''}kg"
               @input="${this._clearCalculations}"
             />
-          </div>
-          <div>
-            <label for="burn">Brannskade</label>
+  </div>
+  <div class="wbi">      
+          
+            <label for="burn">Brannskade:</label>
             <input
               type="number"
               name="burn"
               placeholder="%"
             />
             </div>
+          </div>
+          
+            <div class="slider-container">
+              <input type="range" name="age" id="age-slider" min="0" max="216" step="1" value='36'  @input="${this._updateEstimatedWeight}">
+              
+            </div>
+          </div>
+          <section>
+ 
   </section>
   </div>
        
@@ -751,17 +757,20 @@ class CalculatorView extends LitElement {
           width: 100%;
         }
         .slider{
-          width: 70%;
+          width: 100%;
+          padding: .5rem;
         }
         .labels {
           display: flex;
+          justify-content: space-evenly;
           
         }
         #age-slider {
           -webkit-appearance: none;
-          width: 90%;
+          width: 100%;
           height: 15px;
           border-radius: 5px;  
+          margin: 10px 0px;
           background: #d3d3d3;
           outline: none;
           opacity: 0.7;
@@ -780,10 +789,14 @@ class CalculatorView extends LitElement {
 
         #age-output {
           color: #fff;
-          padding-left: 40%;
-
         }
-
+        .age-display{
+          display: flex;
+          width: 25%;
+        }
+        .wbi{
+          display: flex;
+        }
         .logo{
           width: 50%;
           padding:4rem;
@@ -898,8 +911,8 @@ class CalculatorView extends LitElement {
           fill: #F44336;
         }
         svg {
-          width: 50px;
-          height: 50px;
+          width: 70px;
+          height: 70px;
         }
         div.label {
           width: 100%;
@@ -1076,9 +1089,10 @@ background: linear-gradient(157deg, rgba(239,83,80,0.73) 9%, rgba(255,255,255,0.
           }
         } /* Safari and Chrome */
         @media only screen and (max-width: 592px) {
-    
-        .awb-input {
-          display: flex;
+        .age-display{
+          flex-direction: column;
+        }
+        .wbi{
           flex-direction: column;
         }
         .slider {
