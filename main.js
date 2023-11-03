@@ -479,7 +479,7 @@ class CalculatorView extends LitElement {
       ${this._calculations.length === 0
         ? html`
              <img class="logo" src="logo.svg">
-            <div class="label">UNDER UTVIKLING - BRUK MED VARSOMHET</div>
+            <div class="label">UNDER UTVIKLING - IKKE KVALITETSSIKRET - BRUK MED VARSOMHET</div>
             <div class="label">Velg alder, vekt og eventuelt % 2. og 3. grads forbrenning over (vekt estimeres hvis ikke oppgitt)</div>
             <div class="label">-> Trykk på den blå knappen for å kalkulere (alle verdier kan oppdateres senere) </div>
             <div class="label">Dette er kun et hjelpemiddel. Oppgitte verdier er veiledende, og feil kan forekomme</div>
