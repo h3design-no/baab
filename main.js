@@ -1005,7 +1005,7 @@ class CalculatorView extends LitElement {
         }
         .drug-label {
           border-radius: 0.7em;
-          background-color: #ffffffaa;
+          background-color: #ffffffdd;
           color: #000;
           padding: 0.6rem;
           margin: 2px;
@@ -1026,30 +1026,31 @@ class CalculatorView extends LitElement {
           -o-animation: fadein 0.5s;
         }
         .drug-label.nmbd {
-          background-color: #ef5350bb;
+          background-color: #ef5350dd;
         }
         .drug-label.antinmbd {
           background: rgb(239,83,80);
-background: linear-gradient(157deg, rgba(239,83,80,0.73) 9%, rgba(255,255,255,0.73) 9%, rgba(255,255,255,0.73) 26%, rgba(239,83,80,0.73) 26%, rgba(239,83,80,0.73) 42%, rgba(255,255,255,0.73) 42%, rgba(255,255,255,0.73) 59%, rgba(239,83,80,0.73) 59%, rgba(239,83,80,0.73) 74%, rgba(255,255,255,0.73) 74%, rgba(255,255,255,0.73) 91%, rgba(239,83,80,0.73) 91%);
+          background: linear-gradient(157deg, rgba(239,83,80,0.87) 9%, rgba(255,255,255,0.87) 9%, rgba(255,255,255,0.87) 26%, rgba(239,83,80,0.87) 26%, rgba(239,83,80,0.87) 42%, rgba(255,255,255,0.87) 42%, rgba(255,255,255,0.87) 59%, rgba(239,83,80,0.87) 59%, rgba(239,83,80,0.87) 74%, rgba(255,255,255,0.87) 74%, rgba(255,255,255,0.87) 91%, rgba(239,83,80,0.87) 91%);
+          text-shadow: 0 0 2px white;
         }
         .drug-label.opioid {
-          background-color: #90caf9bb;
+          background-color: #90caf9dd;
         }
         .drug-label.sedative {
           /* background-color: #ffe60029; */
-          background-color: #ffeb3bbb;
+          background-color: #ffeb3bdd;
         }
         .drug-label.benzo {
-          background-color: #f58e2fbb;
+          background-color: #f58e2fdd;
         }
         .drug-label.antimuscarinic {
-          background-color: #4caf50bb;
+          background-color: #4caf50dd;
         }
         .drug-label.vaso {
-          background-color: #cba0fabb;
+          background-color: #cba0fadd;
         }
         .drug-label.local {
-          background-color: #a0a0a0bb;
+          background-color: #a0a0a0dd;
         }
         .drug-dose.nmbd {
           color: #ef5350;
