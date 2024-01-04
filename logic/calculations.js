@@ -304,5 +304,6 @@ export function drug(opts) {
     dose_volume: formatRangeVolume(dose_volume, dec, dv, _weight),
     formula: formatRange(formula) + '/kg',
     class: opts.class || 'default',
+    dialogText: opts.dialogText || '', 
   };};
 }
