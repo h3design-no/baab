@@ -8,46 +8,49 @@ import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/co
 
 import * as calc from './logic/calculations.js';
 
-const ADRENALIN = { name: 'Adrenalin', conc: [.01], unit: 'mg/ml', formula: [1], class: 'vaso', dialogText: 'Adrenalin dialog text' };
-const ADRENALIN_STANS = { name: 'Adrenalin', conc: [.1], unit: 'mg/ml', formula: [10], max: [1000], class: 'vaso', dialogText: 'test' };
-const ALFENTANIL = { name: 'Alfentanil', conc: [.5], unit: 'mg/ml', formula: [10, 20], class: 'opioid', dialogText: 'test' };
-const ATROPIN = { name: 'Atropin', conc: [1], unit: 'mg/ml', formula: [10, 20], max: [1000], class: 'antimuscarinic', dialogText: 'test' };
-const BENPEN = { name: 'Benpen', conc: [10], unit: 'mg/ml', formula: [25000], max: [1200000], dialogText: 'test' };
-const BRIDION = { name: 'Bridion', conc: [100], unit: 'mg/ml', formula: [2000, 4000], max: [1200000], class: 'antinmbd', dialogText: 'test' };
-const BUPIVACAIN = { name: 'Bupivacain', conc: [2.5], unit: 'mg/ml', formula: [2000], class: 'local', dialogText: 'test' };
-const CALCIUMGLUKONAT = { name: 'Calciumglukonat', conc: [.225], unit: 'mmol/ml', formula: [100], max: [4500], dialogText: 'test' };
-const CEFAZOLIN = { name: 'Cefazolin', conc: [100], unit: 'mg/ml', formula: [30000], max: [2000000], dialogText: 'test' };
-const CEFUROXIM = { name: 'Cefuroxim', conc: [100], unit: 'mg/ml', formula: [50000], max: [1500000], dialogText: 'test' };
-const CISATRACURIUM = { name: 'Cisatracurium', conc: [2], unit: 'mg/ml', formula: [150], max: [100000], class: 'nmbd', dialogText: 'test' };
-const CORDARONE1 = { name: 'Cordarone', conc: [50], unit: 'mg/ml', formula: [5000], max: [300000], dialogText: 'test' };
-const CORDARONE2 = { name: 'Cordarone', conc: [50], unit: 'mg/ml', formula: [5000], max: [150000], dialogText: 'test' };
-const CYCLOCAPRON = { name: 'Cyclocapron', conc: [100], unit: 'mg/ml', formula: [15000], max: [1500000], dialogText: 'test' };
-const DEKSAMETASON = { name: 'Deksametason', conc: [4], unit: 'mg/ml', formula: [200, 400], max: [12000], dec: [1], dialogText: 'test' };
-const DEXDOR_N = { name: 'Dexdor (nasal)*', conc: [.1], unit: 'mg/ml', formula: [2, 4], max: [200], dv: [.1], dialogText: 'test' };
-const DIAZEPAM = { name: 'Diazepam', conc: [5], unit: 'mg/ml', formula: [100], class: 'benzo', dialogText: 'test' };
-const FENTANYL = { name: 'Fentanyl', conc: [.05], unit: 'mg/ml', formula: [1, 2], max: [200], class: 'opioid', dialogText: 'Her kommer det endel nyttig tekst om legemiddelet<br>Bivirkninger: respirasjondepresjon' };
-const FIBRINOGEN = { name: 'Fibrinogen', conc: [20], unit: 'mg/ml', formula: [35000, 70000], max: [5000000], dialogText: 'test' };
-const GLYCOPYRRON = { name: 'Glycopyrron', conc: [.2], unit: 'mg/ml', formula: [5, 10], max: [400], class: 'antimuscarinic', dialogText: 'test' };
-const IBUPROFEN = { name: 'Ibuprofen', conc: [10], unit: 'mg/ml', formula: [6000, 10000], max: [400000], age_limit: [6], dialogText: 'test' };
-const KETAMIN = { name: 'Ketamin', conc: [10], unit: 'mg/ml', formula: [1000, 2000], class: 'sedative', dialogText: 'test' };
-const KETAMIN_N = { name: 'Ketamin (nasal)*', conc: [50], unit: 'mg/ml', formula: [1000, 1500], class: 'sedative', dv: [.1], dialogText: 'test' };
-const KETOROLAK = { name: 'Ketorolak', conc: [30], unit: 'mg/ml', formula: [500, 600], max: [30000], age_limit: [12], dialogText: 'test' };
-const KLONIDIN = { name: 'Klonidin', conc: [.015], unit: 'mg/ml', formula: [1], max: [75], dialogText: 'test' };
-const LIDOCAIN = { name: 'Lidocain', conc: [10], unit: 'mg/ml', formula: [3000, 7000], class: 'local', dialogText: 'test' };
-const METRONIDAZOLE = { name: 'Metronidazole', unit: 'mg/ml', conc: [5], formula: [7500], max: [1500000], dialogText: 'test' };
-const MIDAZOLAM = { name: 'Midazolam', conc: [1], unit: 'mg/ml', formula: [50, 100], class: 'benzo', dialogText: 'test' };
-const NACL = { name: 'NaCl', conc: [1], unit: 'mmol/ml', formula: [2000], type: 'liquid', dialogText: 'test' };
-const ONDANSETRON = { name: 'Ondansetron', conc: [2], unit: 'mg/ml', formula: [150], max: [4000], dialogText: 'test' };
-const ORAMORPH = { name: 'Oramorph', conc: [10], unit: 'mg/ml', formula: [20, 40], class: 'opioid', dialogText: 'test' };
-const PARACETAMOL = { name: 'Paracetamol', conc: [10], unit: 'mg/ml', formula: [10000, 15000], dialogText: 'test' };
-const PARECOXIB = { name: 'Parecoxib', conc: [10], unit: 'mg/ml', formula: [1000], max: [40000], age_limit: [12], dialogText: 'test' };
-const PROPOFOL = { name: 'Propofol', conc: [10], unit: 'mg/ml', formula: [3000, 5000], class: 'sedative', dec: [0], dialogText: 'test' };
-const ROCURONIUM = { name: 'Rocuronium', conc: [10], unit: 'mg/ml', formula: [600, 1200], max: [100000], class: 'nmbd', dialogText: 'test' };
-const ROBINUL_NEOSTIGMIN = { name: 'Robinul/Neostigmin 0.5 /', conc: [2.5], unit: 'mg/ml', formula: [50], max: [5000], class: 'antinmbd', dialogText: 'test' };
-const SUXAMETHONIUM = { name: 'Suxamethonium', conc: [10], unit: 'mg/ml', formula: [1000, 2000], max: [100000], class: 'nmbd', dialogText: 'test' };
-const THIOPENTAL = { name: 'Thiopental', conc: [25], unit: 'mg/ml', formula: [5000, 8000], class: 'sedative', dialogText: 'test' };
-const VECURONIUM = { name: 'Vecuronium', conc: [2], unit: 'mg/ml', formula: [100], max: [100000], class: 'nmbd', dialogText: 'test' };
+import { drugs } from './drugList.js';
 
+const {
+  ADRENALIN,
+  ADRENALIN_STANS,
+  ALFENTANIL,
+  ATROPIN,
+  BENPEN,
+  BRIDION,
+  BUPIVACAIN,
+  CALCIUMGLUKONAT,
+  CEFAZOLIN,
+  CEFUROXIM,
+  CISATRACURIUM,
+  CORDARONE1,
+  CORDARONE2,
+  CYCLOCAPRON,
+  DEKSAMETASON,
+  DEXDOR_N,
+  DIAZEPAM,
+  FENTANYL,
+  FIBRINOGEN,
+  GLYCOPYRRON,
+  IBUPROFEN,
+  KETAMIN,
+  KETAMIN_N,
+  KETOROLAK,
+  KLONIDIN,
+  LIDOCAIN,
+  METRONIDAZOLE,
+  MIDAZOLAM,
+  NACL,
+  ONDANSETRON,
+  ORAMORPH,
+  PARACETAMOL,
+  PARECOXIB,
+  PROPOFOL,
+  ROCURONIUM,
+  ROBINUL_NEOSTIGMIN,
+  SUXAMETHONIUM,
+  THIOPENTAL,
+  VECURONIUM
+} = drugs;
 
 ///////////////////////////////////////////
 
