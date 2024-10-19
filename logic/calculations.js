@@ -139,10 +139,10 @@ export function airwayField() {
 export function urineProduction() {
   let uProd
 
-  if (_age < 1) uProd = {prod: _weight * 2, formel: '2 mg/kg/t'};
-  else if (_age < 3) uProd = {prod: _weight * 1.5, formel: '1,5 mg/kg/t'};
-  else if (_age < 13) uProd = {prod: _weight * 1, formel: '1 mg/kg/t'};
-  else uProd = {prod: _weight * .5, formel: '0,5 mg/kg/t'};
+  if (_age < 1) uProd = {prod: _weight * 2, formel: '2 ml/kg/t'};
+  else if (_age < 3) uProd = {prod: _weight * 1.5, formel: '1,5 ml/kg/t'};
+  else if (_age < 13) uProd = {prod: _weight * 1, formel: '1 ml/kg/t'};
+  else uProd = {prod: _weight * .5, formel: '0,5 ml/kg/t'};
 
   return [{title: 'Urinproduksjon ' + uProd.formel, dose: uProd.prod + ' ml/t', class: 'yellow'}];
 }
