@@ -354,9 +354,7 @@ openDialog(text, drugName, drugClass) {
     ];
 
     this._acuteDrugs = [
-      calc.bloodProd(),
-      calc.drug(CYCLOCAPRON),
-      calc.drug(CALCIUMGLUKONAT),
+      calc.bloodMTP(),
       calc.drug(FIBRINOGEN),
       calc.drug(PROPOFOL),
       calc.drug(KETAMIN),

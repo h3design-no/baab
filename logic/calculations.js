@@ -170,6 +170,15 @@ export function bloodProd() {
   formula: 'TBC: ' + plater + ' ml' };
 }
 
+export function bloodMTP() {
+  const sag = _weight * 10 > 250 ? 250 : _weight * 10;
+  const plasma = _weight * 10 > 200 ? 200 : _weight * 10;
+  const plater = _weight * 5;
+  return { title: 'Blod: MTP', dose: 'SAG: ' + sag + ' ml', 
+  dose_volume: 'Plasma: ' + plasma + ' ml', 
+  formula: 'TBC: ' + plater + ' ml' };
+}
+
 
 // > 30 kg: RA  4 ml/kg/%brannskade  50%  8 t / 16t
 // < 30 kg: RA/Plasmalyte 4 ml/kg/%brannskade  50%  8 t / 16t + 50% av Holliday & Segars formel

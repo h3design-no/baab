@@ -20,7 +20,7 @@ export const drugs = {
     FIBRINOGEN: { name: 'Fibrinogen', conc: [20], unit: 'mg/ml', formula: [35000, 70000], max: [5000000], dialogText: 'test' },
     GLYCOPYRRON: { name: 'Glycopyrron', conc: [.2], unit: 'mg/ml', formula: [5, 10], max: [400], class: 'antimuscarinic', dialogText: 'test' },
     IBUPROFEN: { name: 'Ibuprofen', conc: [10], unit: 'mg/ml', formula: [6000, 10000], max: [400000], age_limit: [6], dialogText: 'test' },
-    KETAMIN: { name: 'Ketamin', conc: [10], unit: 'mg/ml', formula: [1000, 2000], class: 'sedative', dialogText: 'test' },
+    KETAMIN: { name: 'Ketamin', conc: [10], unit: 'mg/ml', formula: [1000, 3000], class: 'sedative', dialogText: 'test' },
     KETAMIN_N: { name: 'Ketamin (nasal)*', conc: [50], unit: 'mg/ml', formula: [1000, 1500], class: 'sedative', dv: [.1], dialogText: 'test' },
     KETOROLAK: { name: 'Ketorolak', conc: [30], unit: 'mg/ml', formula: [500, 600], max: [30000], age_limit: [12], dialogText: 'test' },
     KLONIDIN: { name: 'Klonidin', conc: [.015], unit: 'mg/ml', formula: [1], max: [75], dialogText: 'test' },
