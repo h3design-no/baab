@@ -90,29 +90,29 @@ class CalculatorView extends LitElement {
     this._cpr_airways = [];
     this._cpr_cordarone1 = [];
     this._cpr_cordarone2 = [];
-    this._burn =[];
+    this._burn = [];
     this._burnDrugs = [];
-    this._drugs =[];
+    this._drugs = [];
     this._selectedTab = 0; // Initially select the first tab
     //////////
-   
+
     /////////
   }
 
 
-openDialog(text, drugName, drugClass) {
-  console.log('openDialog called with text:', text, 'and drugName:', drugName); // Add this line
-  this.updateComplete.then(() => {
+  openDialog(text, drugName, drugClass) {
+    console.log('openDialog called with text:', text, 'and drugName:', drugName); // Add this line
+    this.updateComplete.then(() => {
       const dialog = this.shadowRoot.querySelector('dialog');
       console.log('dialog:', dialog); // Add this line
       dialog.innerHTML = `<h3 class='drug-dialog ${drugClass}'>${drugName}</h3>${text}`;
       dialog.showModal();
 
       dialog.onclick = () => {
-          dialog.close();
+        dialog.close();
       };
-  });
-}
+    });
+  }
 
   selectTab(tabIndex) {
     this._selectedTab = tabIndex;
@@ -124,13 +124,13 @@ openDialog(text, drugName, drugClass) {
 
   ///////////////////////
 
-  
+
 
   _updateEstimatedWeight(e) {
     const age = e.target.value < 19
       ? e.target.value + 'm'
       : Math.ceil(e.target.value / 12)
- 
+
     this._clearCalculations();
     if (!age) return this._estWeight = '';
 
@@ -139,16 +139,16 @@ openDialog(text, drugName, drugClass) {
     //   ? 2 * age + 8
     //   : 3 * age + 7;
 
-    switch(age) {
+    switch (age) {
       case '0m':
         this._estWeight = 3
         break;
       case '1m':
         this._estWeight = 4
         break;
-        case '2m':
-          this._estWeight = 5
-          break;
+      case '2m':
+        this._estWeight = 5
+        break;
       case '3m':
         this._estWeight = 6
         break;
@@ -178,7 +178,7 @@ openDialog(text, drugName, drugClass) {
         break;
       case '12m':
         this._estWeight = 10
-        break;  
+        break;
       case '13m':
         this._estWeight = 10
         break;
@@ -190,7 +190,7 @@ openDialog(text, drugName, drugClass) {
         break;
       case '16m':
         this._estWeight = 11
-        break; 
+        break;
       case '17m':
         this._estWeight = 11
         break;
@@ -202,7 +202,7 @@ openDialog(text, drugName, drugClass) {
         break;
       case 3:
         this._estWeight = 15
-        break;  
+        break;
       case 4:
         this._estWeight = 17
         break;
@@ -214,19 +214,19 @@ openDialog(text, drugName, drugClass) {
         break;
       case 7:
         this._estWeight = 25
-        break;  
+        break;
       case 8:
         this._estWeight = 27
         break;
       case 9:
         this._estWeight = 28
-        break; 
+        break;
       case 10:
         this._estWeight = 31
         break;
       case 11:
         this._estWeight = 34
-        break;  
+        break;
       case 12:
         this._estWeight = 38
         break;
@@ -238,17 +238,17 @@ openDialog(text, drugName, drugClass) {
         break;
       case 15:
         this._estWeight = 54
-        break;  
+        break;
       case 16:
         this._estWeight = 60
         break;
       case 17:
         this._estWeight = 63
-        break;   
+        break;
       case 18:
         this._estWeight = 65
         break;
-    } 
+    }
 
     if (this._estWeight >= 70) this._estWeight = 70;
     // console.log('estWeight', this._estWeight);
@@ -330,6 +330,7 @@ openDialog(text, drugName, drugClass) {
       calc.drug(VECURONIUM),
       calc.drug(CISATRACURIUM),
       calc.drug(ROBINUL_NEOSTIGMIN),
+      calc.drug(BRIDION),
       calc.drug(FENTANYL),
       calc.drug(ALFENTANIL),
       calc.drug(PARACETAMOL),
@@ -403,37 +404,39 @@ openDialog(text, drugName, drugClass) {
     ];
 
     this._drugs = [
-      calc.drug(PROPOFOL),
-      calc.drug(KETAMIN),
-      calc.drug(THIOPENTAL),
-      calc.drug(SUXAMETHONIUM),
-      calc.drug(ROCURONIUM),
-      calc.drug(VECURONIUM),
-      calc.drug(CISATRACURIUM),
-      calc.drug(ROBINUL_NEOSTIGMIN),
-      calc.drug(BRIDION),
-      calc.drug(FENTANYL),
-      calc.drug(ALFENTANIL),
-      calc.drug(ORAMORPH),
-      calc.drug(PARACETAMOL),
-      calc.drug(IBUPROFEN),
-      calc.drug(DIAZEPAM),
-      calc.drug(MIDAZOLAM),
-      calc.drug(GLYCOPYRRON),
-      calc.drug(ATROPIN),
       calc.drug(ADRENALIN),
-      calc.drug(DEKSAMETASON),
-      calc.drug(ONDANSETRON),
+      calc.drug(ALFENTANIL),
+      calc.drug(ATROPIN),
+      calc.drug(BENPEN),
+      calc.drug(BRIDION),
+      calc.drug(BUPIVACAIN),
+      calc.drug(CALCIUMGLUKONAT),
       calc.drug(CEFAZOLIN),
       calc.drug(CEFUROXIM),
-      calc.drug(METRONIDAZOLE),
-      calc.drug(BENPEN),
-      calc.drug(LIDOCAIN),
-      calc.drug(BUPIVACAIN),
-      calc.drug(NACL),
+      calc.drug(CISATRACURIUM),
       calc.drug(CYCLOCAPRON),
-      calc.drug(CALCIUMGLUKONAT),
-      calc.drug(FIBRINOGEN)
+      calc.drug(DEKSAMETASON),
+      calc.drug(DEXDOR_N),
+      calc.drug(DIAZEPAM),
+      calc.drug(FENTANYL),
+      calc.drug(FIBRINOGEN),
+      calc.drug(GLYCOPYRRON),
+      calc.drug(IBUPROFEN),
+      calc.drug(KETAMIN),
+      calc.drug(KETAMIN_N),
+      calc.drug(LIDOCAIN),
+      calc.drug(METRONIDAZOLE),
+      calc.drug(MIDAZOLAM),
+      calc.drug(NACL),
+      calc.drug(ONDANSETRON),
+      calc.drug(ORAMORPH),
+      calc.drug(PARACETAMOL),
+      calc.drug(PROPOFOL),
+      calc.drug(ROBINUL_NEOSTIGMIN),
+      calc.drug(ROCURONIUM),
+      calc.drug(SUXAMETHONIUM),
+      calc.drug(THIOPENTAL),
+      calc.drug(VECURONIUM)
     ];
 
     /*
@@ -598,12 +601,13 @@ openDialog(text, drugName, drugClass) {
         <output class="grid">
           ${this._acuteDrugs.map(item => {
           return html`
-              <div class="drug-label ${item.class}">${item.title}</div>
-              <div class="drug-dose ${item.class}">${item.dose}</div>
-              <div class="drug-dose ${item.class}">${item.dose_volume}</div>
-              <div class="drug-dose ${item.class}">${item.formula}</div>
-              <div class="line"></div>
-            `;
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
+                    <div class="drug-dose ${item.class}">${item.dose}</div>
+                    <div class="drug-dose ${item.class}">${item.dose_volume}</div>
+                    <div class="drug-dose ${item.class}">${item.formula}</div>
+                    <div class="line"></div>
+                    <dialog ref=${dialog => this.dialog = dialog}>${this.dialogText}</dialog>
+                  `;
         })}
         </output>
     `
@@ -628,11 +632,12 @@ openDialog(text, drugName, drugClass) {
                 <div class="subheader">Adrenalin: fra 1. sløyfe ved PEA/asystole eller fra 2. sjokk ved VF/VT</div>
                 ${this._cpr_adrenalin.map(item => {
           return html`
-                    <div class="drug-label ${item.class}">${item.title}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
                     <div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
                     <div class="line"></div>
+                    <dialog ref=${dialog => this.dialog = dialog}>${this.dialogText}</dialog>
                   `;
         })}
               </output>
@@ -640,11 +645,12 @@ openDialog(text, drugName, drugClass) {
                 <div class="subheader">Cordarone etter 2. mislykkede sjokk</div>
                 ${this._cpr_cordarone1.map(item => {
           return html`
-                    <div class="drug-label ${item.class}">${item.title}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
                     <div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
                     <div class="line"></div>
+                    <dialog ref=${dialog => this.dialog = dialog}>${this.dialogText}</dialog>
                   `;
         })}
               </output>
@@ -652,11 +658,12 @@ openDialog(text, drugName, drugClass) {
                 <div class="subheader">Cordarone etter 3. mislykkede sjokk</div>
                 ${this._cpr_cordarone2.map(item => {
           return html`
-                    <div class="drug-label ${item.class}">${item.title}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
                     <div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
                     <div class="line"></div>
+                    <dialog ref=${dialog => this.dialog = dialog}>${this.dialogText}</dialog>
                   `;
         })}
               </output>
@@ -703,11 +710,12 @@ openDialog(text, drugName, drugClass) {
               <output class="grid">
                 ${this._burnDrugs.map(item => {
           return html`
-                    <div class="drug-label ${item.class}">${item.title}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
                     <div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
                     <div class="line"></div>
+                    <dialog ref=${dialog => this.dialog = dialog}>${this.dialogText}</dialog>
                   `;
         })}
               </output>
@@ -743,18 +751,19 @@ openDialog(text, drugName, drugClass) {
               <output class="grid">
                 ${this._drugs.map(item => {
           return html`
-                    <div class="drug-label ${item.class}">${item.title}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
                     <div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
                     <div class="line"></div>
+                    <dialog ref=${dialog => this.dialog = dialog}>${this.dialogText}</dialog>
                   `;
         })}
               </output>
             `
         : ''
       }
-      <div>* Doseringsvolum for nasal administrasjon er oppgitt inkludert dødvolum på 0,1 ml </div>
+      
 
   </div>
   
