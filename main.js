@@ -13,20 +13,18 @@ import { drugs } from './drugList.js';
 const {
   ADRENALIN,
   ADRENALIN_STANS,
+  AMIODARON1,
+  AMIODARON2,
   ALFENTANIL,
   ATROPIN,
   BENPEN,
-  BRIDION,
   BUPIVACAIN,
   CALCIUMGLUKONAT,
   CEFAZOLIN,
   CEFUROXIM,
   CISATRACURIUM,
-  CORDARONE1,
-  CORDARONE2,
-  CYCLOCAPRON,
   DEKSAMETASON,
-  DEXDOR_N,
+  DEKSMEDETOMIDIN_N,
   DIAZEPAM,
   FENTANYL,
   FIBRINOGEN,
@@ -39,16 +37,18 @@ const {
   LIDOCAIN,
   METRONIDAZOLE,
   MIDAZOLAM,
+  MORFIN,
   NACL,
   ONDANSETRON,
-  ORAMORPH,
   PARACETAMOL,
   PARECOXIB,
   PROPOFOL,
   ROCURONIUM,
   ROBINUL_NEOSTIGMIN,
+  SUGAMMADEX,
   SUXAMETHONIUM,
   THIOPENTAL,
+  TRANEKSAMSYRE,
   VECURONIUM
 } = drugs;
 
@@ -324,13 +324,13 @@ class CalculatorView extends LitElement {
       calc.drug(KETAMIN),
       calc.drug(KETAMIN_N),
       calc.drug(THIOPENTAL),
-      calc.drug(DEXDOR_N),
+      calc.drug(DEKSMEDETOMIDIN_N),
       calc.drug(SUXAMETHONIUM),
       calc.drug(ROCURONIUM),
       calc.drug(VECURONIUM),
       calc.drug(CISATRACURIUM),
       calc.drug(ROBINUL_NEOSTIGMIN),
-      calc.drug(BRIDION),
+      calc.drug(SUGAMMADEX),
       calc.drug(FENTANYL),
       calc.drug(ALFENTANIL),
       calc.drug(PARACETAMOL),
@@ -357,6 +357,7 @@ class CalculatorView extends LitElement {
     this._acuteDrugs = [
       calc.bloodMTP(),
       calc.drug(FIBRINOGEN),
+      calc.drug(TRANEKSAMSYRE),
       calc.drug(PROPOFOL),
       calc.drug(KETAMIN),
       calc.drug(SUXAMETHONIUM),
@@ -376,12 +377,12 @@ class CalculatorView extends LitElement {
       calc.drug(ADRENALIN_STANS),
     ];
 
-    this._cpr_cordarone1 = [
-      calc.drug(CORDARONE1),
+    this._cpr_amiodaron1 = [
+      calc.drug(AMIODARON1),
     ];
 
-    this._cpr_cordarone2 = [
-      calc.drug(CORDARONE2),
+    this._cpr_amiodaron2 = [
+      calc.drug(AMIODARON2),
     ];
 
     this._burnDrugs = [
@@ -408,15 +409,13 @@ class CalculatorView extends LitElement {
       calc.drug(ALFENTANIL),
       calc.drug(ATROPIN),
       calc.drug(BENPEN),
-      calc.drug(BRIDION),
       calc.drug(BUPIVACAIN),
       calc.drug(CALCIUMGLUKONAT),
       calc.drug(CEFAZOLIN),
       calc.drug(CEFUROXIM),
       calc.drug(CISATRACURIUM),
-      calc.drug(CYCLOCAPRON),
       calc.drug(DEKSAMETASON),
-      calc.drug(DEXDOR_N),
+      calc.drug(DEKSMEDETOMIDIN_N),
       calc.drug(DIAZEPAM),
       calc.drug(FENTANYL),
       calc.drug(FIBRINOGEN),
@@ -427,15 +426,18 @@ class CalculatorView extends LitElement {
       calc.drug(LIDOCAIN),
       calc.drug(METRONIDAZOLE),
       calc.drug(MIDAZOLAM),
+      calc.drug(MORFIN),
       calc.drug(NACL),
       calc.drug(ONDANSETRON),
-      calc.drug(ORAMORPH),
+      calc.drug(PARECOXIB),
       calc.drug(PARACETAMOL),
       calc.drug(PROPOFOL),
       calc.drug(ROBINUL_NEOSTIGMIN),
       calc.drug(ROCURONIUM),
+      calc.drug(SUGAMMADEX),
       calc.drug(SUXAMETHONIUM),
       calc.drug(THIOPENTAL),
+      calc.drug(TRANEKSAMSYRE),
       calc.drug(VECURONIUM)
     ];
 
@@ -550,7 +552,9 @@ class CalculatorView extends LitElement {
               <output class="grid">
                 ${this._calculations.map(item => {
           return html`
-                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">
+                      <span class="text-background">${item.title}</span>
+                    </div>
                     <div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
@@ -601,7 +605,9 @@ class CalculatorView extends LitElement {
         <output class="grid">
           ${this._acuteDrugs.map(item => {
           return html`
-                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">
+                      <span class="text-background">${item.title}</span>
+                    </div>
                     <div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
@@ -632,7 +638,9 @@ class CalculatorView extends LitElement {
                 <div class="subheader">Adrenalin: fra 1. sløyfe ved PEA/asystole eller fra 2. sjokk ved VF/VT</div>
                 ${this._cpr_adrenalin.map(item => {
           return html`
-                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">
+                      <span class="text-background">${item.title}</span>
+                    </div>
                     <div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
@@ -642,10 +650,12 @@ class CalculatorView extends LitElement {
         })}
               </output>
               <output class="grid">
-                <div class="subheader">Cordarone etter 2. mislykkede sjokk</div>
-                ${this._cpr_cordarone1.map(item => {
+                <div class="subheader">Amiodaron (Cordarone) etter 2. mislykkede sjokk</div>
+                ${this._cpr_amiodaron1.map(item => {
           return html`
-                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">
+                      <span class="text-background">${item.title}</span>
+                    </div>
                     <div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
@@ -655,10 +665,12 @@ class CalculatorView extends LitElement {
         })}
               </output>
               <output class="grid">
-                <div class="subheader">Cordarone etter 3. mislykkede sjokk</div>
-                ${this._cpr_cordarone2.map(item => {
+                <div class="subheader">Amiodaron (Cordarone) etter 3. mislykkede sjokk</div>
+                ${this._cpr_amiodaron2.map(item => {
           return html`
-                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">
+                      <span class="text-background">${item.title}</span>
+                    </div>
                     <div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
@@ -710,8 +722,9 @@ class CalculatorView extends LitElement {
               <output class="grid">
                 ${this._burnDrugs.map(item => {
           return html`
-                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
-                    <div class="drug-dose ${item.class}">${item.dose}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">
+                      <span class="text-background">${item.title}</span>
+                    </div><div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
                     <div class="line"></div>
@@ -751,7 +764,9 @@ class CalculatorView extends LitElement {
               <output class="grid">
                 ${this._drugs.map(item => {
           return html`
-                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">${item.title}</div>
+                    <div class="drug-label ${item.class}" @click="${() => this.openDialog(item.dialogText, item.title, item.class)}">
+                      <span class="text-background">${item.title}</span>
+                    </div>
                     <div class="drug-dose ${item.class}">${item.dose}</div>
                     <div class="drug-dose ${item.class}">${item.dose_volume}</div>
                     <div class="drug-dose ${item.class}">${item.formula}</div>
@@ -1070,8 +1085,13 @@ class CalculatorView extends LitElement {
         .drug-label.antinmbd {
           background: rgb(239,83,80);
           background: linear-gradient(157deg, rgba(239,83,80,0.87) 9%, rgba(255,255,255,0.87) 9%, rgba(255,255,255,0.87) 26%, rgba(239,83,80,0.87) 26%, rgba(239,83,80,0.87) 42%, rgba(255,255,255,0.87) 42%, rgba(255,255,255,0.87) 59%, rgba(239,83,80,0.87) 59%, rgba(239,83,80,0.87) 74%, rgba(255,255,255,0.87) 74%, rgba(255,255,255,0.87) 91%, rgba(239,83,80,0.87) 91%);
-          text-shadow: 0 0 2px white;
         }
+        .drug-label.antinmbd .text-background {
+          background-color: #ffffffaa; /* White background just behind the text */
+          padding: 1px 1px; /* Optional: Adds spacing around the text */
+          border-radius: 1px; /* Optional: Rounds the corners */
+          display: inline; /* Ensures the white background wraps only the text */
+}
         .drug-label.opioid {
           background-color: #90caf9dd;
         }
