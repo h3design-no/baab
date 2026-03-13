@@ -952,7 +952,7 @@ class CalculatorView extends LitElement {
           margin: 5px;
         }
         input {
-          background-color: rgba(255, 255, 255, 0.8);
+          background-color: rgba(255, 255, 255, 0.9);
           backdrop-filter: blur(5px);
           color: #000;
           border: 0;
