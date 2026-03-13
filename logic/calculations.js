@@ -171,17 +171,17 @@ export function bloodProd() {
 }
 
 export function bloodMTP() {
-  const sag = _weight * 10 > 250 ? 250 : _weight * 10;
-  const plasma = _weight * 10 > 200 ? 200 : _weight * 10;
-  const plater = _weight * 5;
-  return { title: 'Blod: MTP', dose: 'SAG: ' + sag + ' ml', 
-  dose_volume: 'Plasma: ' + plasma + ' ml', 
-  formula: 'TBC: ' + plater + ' ml' };
+  const sag = _weight > 30 ? '5 SAG' : 'SAG: ' + _weight * 5 + ' ml x 4';
+  const plasma = _weight > 30 ? '5 Plasma' : 'Plasma: ' + _weight * 5 + ' ml x 4';
+  const plater = _weight > 30 ? '1 TBC' : 'TBC: ' + _weight * 5 + ' ml x 1';
+  return { title: 'Blod: MTP', dose: sag, 
+  dose_volume: plasma, 
+  formula: plater };
 }
 
 
-// > 30 kg: RA  4 ml/kg/%brannskade  50%  8 t / 16t
-// < 30 kg: RA/Plasmalyte 4 ml/kg/%brannskade  50%  8 t / 16t + 50% av Holliday & Segars formel
+// > 30 kg: RA  3 ml/kg/%brannskade  50%  8 t / 16t
+// < 30 kg: RA/Plasmalyte 3-4 ml/kg/%brannskade  50%  8 t / 16t + 50% av Holliday & Segars formel
 // 0-10 kg 100 ml/kg/døgn, 10-20 kg 50 ml/kg/døgn, 20-30 kg 20 ml/kg/døgn Plasmalyte Glucos
 
 function hsFormula() {
@@ -205,7 +205,7 @@ export function hollidaySegar() {
 
 export function burnPercent(hsArray) {
   let parkland, parkland8, parkland16, hollidaySegar50, hollidaySegar50p24;
-  parkland = _weight * 4 * _burnPercent;
+  parkland = _weight * 3 * _burnPercent;
 
   parkland8 = (parkland / 2) / 8
   parkland16 = (parkland / 2) / 16
@@ -215,15 +215,16 @@ export function burnPercent(hsArray) {
   
   if (_burnPercent < 10) return [{title: '', dose: 'Ikke behov for spesiell væskebehandling'}, ];
   else
-    if (_weight > 30) return [{title: 'Parkland: Ringer-Ac.', dose: parkland + ' ml', class: ''},
+    if (_weight > 30 && _burnPercent < 15) return [{title: '', dose: 'Ikke behov for spesiell væskebehandling'}, ];
+    else if (_weight > 30) return [{title: 'Parkland: Ringer-Ac.', dose: parkland + ' ml', class: ''},
       {title: 'Hastighet: første 8t / neste 16t', dose: parkland8.toFixed(0) + ' ml/t / ' + parkland16.toFixed(0) + ' ml/t'},
       {title: 'Basalbehov', dose: 'Vanligvis ikke nødvendig'}];
-    else if (_weight > 5) return [{title: 'Parkland: Ringer-Ac./Plasmalyte', dose: parkland + ' ml', class: ''},
-            {title: 'Hastighet: første 8t | neste 16t', dose: `${parkland8.toFixed(0)} ml/t | ${parkland16.toFixed(0)} ml/t`},
+    else if (_weight > 5) return [{title: 'Parkland: Ringer-Ac./Plasmalyte', dose: parkland + ' - ' + (parkland/3)*4 + ' ml', class: ''},
+            {title: 'Hastighet: første 8t | neste 16t', dose: `${parkland8.toFixed(0)}-${((parkland8/3)*4).toFixed(0)} ml/t | ${parkland16.toFixed(0)}-${((parkland16/3)*4).toFixed(0)} ml/t`},
             {title: 'Basalbehov(H&S50%): Plasmalyte Glucos', dose: hollidaySegar50 + ' ml/døgn'},
             {title: 'Hastighet H&S50%', dose: hollidaySegar50p24.toFixed(1) + ' ml/t'}];
-    else return [{title: 'Parkland: Ringer-Ac./Plasmalyte', dose: parkland + ' ml', class: ''},
-            {title: 'Hastighet: første 8t | neste 16t', dose: `${parkland8.toFixed(1)} ml/t | ${parkland16.toFixed(1)} ml/t`},
+    else return [{title: 'Parkland: Ringer-Ac./Plasmalyte', dose: parkland + ' - ' + (parkland/3)*4 + ' ml', class: ''},
+            {title: 'Hastighet: første 8t | neste 16t', dose: `${parkland8.toFixed(1)}-${((parkland8/3)*4).toFixed(1)} ml/t | ${parkland16.toFixed(1)}-${((parkland16/3)*4).toFixed(1)} ml/t`},
             {title: 'Basalbehov(H&S50%): Plasmalyte Glucos', dose: hollidaySegar50 + ' ml/døgn'},
             {title: 'Hastighet H&S50%', dose: hollidaySegar50p24.toFixed(1) + ' ml/t'}];
 }
