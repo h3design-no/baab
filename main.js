@@ -97,6 +97,7 @@ class CalculatorView extends LitElement {
     //////////
 
     /////////
+    this._currentMonths = 36; // Track the actual months for form submission
   }
 
 
@@ -127,17 +128,36 @@ class CalculatorView extends LitElement {
 
 
   _updateEstimatedWeight(e) {
-    const age = e.target.value < 19
-      ? e.target.value + 'm'
-      : Math.ceil(e.target.value / 12)
+    const sliderValue = parseInt(e.target.value);
+    let months;
 
+    if (sliderValue <= 450) {
+      months = Math.round((sliderValue / 450) * 18);
+    } else {
+      months = Math.round(18 + ((sliderValue - 450) / (1000 - 450)) * (216 - 18));
+    }
+
+    this._currentMonths = months; // Update for form submission
+
+    let ageText = "";
+    if (months < 19) {
+      ageText = months + " måneder";
+    } else {
+      const years = Math.ceil(months / 12);
+      ageText = years + " år";
+    }
+
+    this.shadowRoot.getElementById("age-output").textContent = ageText;
+
+    // Clear calculations if needed
     this._clearCalculations();
-    if (!age) return this._estWeight = '';
+    if (!months) return this._estWeight = '';
 
-
-    // this._estWeight = age <= 5
-    //   ? 2 * age + 8
-    //   : 3 * age + 7;
+    // Round months for weight estimation (reuse existing logic)
+    const roundedMonths = Math.round(months);
+    const age = roundedMonths < 19
+      ? roundedMonths + 'm'
+      : Math.ceil(roundedMonths / 12)
 
     switch (age) {
       case '0m':
@@ -253,17 +273,6 @@ class CalculatorView extends LitElement {
     if (this._estWeight >= 70) this._estWeight = 70;
     // console.log('estWeight', this._estWeight);
 
-    const months = parseInt(e.target.value);
-    let ageText = "";
-
-    if (months < 19) {
-      ageText = months + " måneder";
-    } else {
-      const years = Math.ceil(months / 12);
-      ageText = years + " år";
-    }
-
-    this.shadowRoot.getElementById("age-output").textContent = ageText;
   }
   _clearCalculations() {
     this._calculations = [];
@@ -482,8 +491,8 @@ class CalculatorView extends LitElement {
           </div>
           
             <div class="slider-container">
-              <input type="range" name="age" id="age-slider" min="0" max="216" step="1" value='36'  @input="${this._updateEstimatedWeight}">
-              
+              <input type="range" name="age-slider" id="age-slider" min="0" max="1000" step="1" value='500' @input="${this._updateEstimatedWeight}">
+              <input type="hidden" name="age" value="${this._currentMonths}"> <!-- Hidden input for actual months -->
             </div>
           </div>
           <section>
