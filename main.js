@@ -64,6 +64,7 @@ class CalculatorView extends LitElement {
     return {
       _estWeight: { type: String },
       _weight: { type: String },
+      _ageMonths: { type: String },
       _calculations: { type: Array },
       _vitals: { type: Array },
       _selectedTab: { type: Number },
@@ -81,6 +82,7 @@ class CalculatorView extends LitElement {
     this.dialogText = null;
     this._estWeight = '15';
     this._weight = '';
+    this._ageMonths = '';
     this._calculations = [];
     this._vitals = [];
     this._airwayOverview = [];
@@ -290,6 +292,7 @@ class CalculatorView extends LitElement {
     console.log(months)
 
     this._weight = weight;
+    this._ageMonths = months;
     calc.setAge(age);
     calc.ageMonths(months);
     calc.setWeight(weight);
@@ -636,7 +639,7 @@ class CalculatorView extends LitElement {
               ${this._selectedTab === 2
         ? html`
 
-              <a class="sloyfe-button" href="sloyfe.html?weight=${this._weight || this._estWeight}">
+              <a class="sloyfe-button" href="sloyfe.html?weight=${this._weight || this._estWeight}&ageMonths=${this._ageMonths || ''}">
                 Start sløyfeguide
               </a>
               <output class="flex big">

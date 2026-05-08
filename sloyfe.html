@@ -333,7 +333,7 @@
     /* Panel 3: Verktøy */
     .tool-buttons {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 0.5rem;
     }
     .tool-button {
@@ -470,7 +470,8 @@
       .initial-value { font-size: 1.5rem; }
       .rhythm-button .label-main { font-size: 1.4rem; }
       .rhythm-sub-label { font-size: 0.9rem; }
-      .tool-button { font-size: 1.2rem; padding: 0.8rem 0.3rem; }
+      .tool-buttons { grid-template-columns: 1fr 1fr; }
+      .tool-button { font-size: 1rem; padding: 0.7rem 0.3rem; }
       .hht-grid { grid-template-columns: 1fr; gap: 0.6rem; }
     }
 
@@ -613,6 +614,7 @@
   <!-- Panel 3: Verktøy -->
   <section class="panel" id="panel-tools">
     <div class="tool-buttons">
+      <button class="tool-button" id="btn-tool-airway">Luftveisutstyr</button>
       <button class="tool-button" id="btn-tool-meds">Medikamentdoser</button>
       <button class="tool-button" id="btn-tool-hht">4H og 4T</button>
       <button class="tool-button" id="btn-tool-summary">Oppsummering</button>
@@ -628,6 +630,24 @@
 </div>
 
 <!-- Modaler -->
+<dialog id="dlg-airway">
+  <div class="modal-header">
+    <h2>Luftveisutstyr</h2>
+    <button class="modal-close" data-close="dlg-airway" aria-label="Lukk">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div id="airway-no-age" class="hidden" style="color: #ff8a65; padding: 1rem; text-align: center;">
+      Alder er ikke satt — gå tilbake og angi alder på hovedsiden først.
+    </div>
+    <table class="dose-table" id="airway-table">
+      <tbody></tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button data-close="dlg-airway">Lukk</button>
+  </div>
+</dialog>
+
 <dialog id="dlg-meds">
   <div class="modal-header">
     <h2>Medikamentdoser</h2>
@@ -718,13 +738,25 @@
   </div>
 </dialog>
 
-<script>
+<script type="module">
+import { setAge, setWeight, ageMonths, airwayField } from './logic/calculations.js';
+
 (function () {
   'use strict';
 
   const params = new URLSearchParams(window.location.search);
   const weight = parseFloat(params.get('weight'));
   const hasWeight = !isNaN(weight) && weight > 0;
+  const ageMonthsParam = parseFloat(params.get('ageMonths'));
+  const hasAge = !isNaN(ageMonthsParam) && ageMonthsParam >= 0;
+  const ageYears = hasAge ? ageMonthsParam / 12 : null;
+
+  // Initiér calculations.js-state hvis vi har vekt og alder
+  if (hasWeight) setWeight(weight);
+  if (hasAge) {
+    setAge(ageYears);
+    ageMonths(ageMonthsParam);
+  }
 
   const joule = hasWeight ? Math.min(Math.round(weight * 4), 200) : null;
   const adrMg = hasWeight ? Math.min(weight * 0.01, 1) : null;
@@ -1082,8 +1114,26 @@
   function openDialog(id) {
     const d = document.getElementById(id);
     if (id === 'dlg-summary') renderSummary();
+    if (id === 'dlg-airway') renderAirway();
     if (typeof d.showModal === 'function') d.showModal();
     else d.setAttribute('open', '');
+  }
+
+  function renderAirway() {
+    const noAge = document.getElementById('airway-no-age');
+    const table = document.getElementById('airway-table');
+    if (!hasAge) {
+      noAge.classList.remove('hidden');
+      table.classList.add('hidden');
+      return;
+    }
+    noAge.classList.add('hidden');
+    table.classList.remove('hidden');
+    const rows = airwayField();
+    const tbody = table.querySelector('tbody');
+    tbody.innerHTML = rows.map(r =>
+      '<tr><td>' + r.title + '</td><td class="value">' + r.dose + '</td></tr>'
+    ).join('');
   }
   function closeDialog(id) {
     const d = document.getElementById(id);
@@ -1182,6 +1232,7 @@
   document.getElementById('btn-given-adr').addEventListener('click', ackAdrenalin);
   document.getElementById('btn-given-ami').addEventListener('click', ackAmiodaron);
 
+  document.getElementById('btn-tool-airway').addEventListener('click', () => openDialog('dlg-airway'));
   document.getElementById('btn-tool-meds').addEventListener('click', () => openDialog('dlg-meds'));
   document.getElementById('btn-tool-hht').addEventListener('click', () => openDialog('dlg-hht'));
   document.getElementById('btn-tool-summary').addEventListener('click', () => openDialog('dlg-summary'));

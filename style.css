@@ -91,13 +91,7 @@ footer {
     justify-content: center;
 }
 
-#donate-button {
-    height: auto;
-    max-width: 8rem;
-    padding: 0;
-}
-
-.h3d-logo {
+.footer-logo {
     max-height: 1rem;
     width: auto;
     padding: 0 .3rem;
