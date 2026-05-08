@@ -123,7 +123,14 @@
       height: 36px;
     }
 
-    /* Aktiv sløyfe */
+    /* Sløyfe-panel: fast struktur */
+    .loop-clock-area {
+      min-height: 8.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
     .clock-main {
       font-size: 6rem;
       font-weight: 300;
@@ -134,13 +141,19 @@
       font-variant-numeric: tabular-nums;
       line-height: 1;
     }
+    .clock-main.idle {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: #ffeb3b;
+      letter-spacing: 0.02em;
+    }
     .clock-main.overtime { color: #ff5722; }
     .clock-total {
       font-size: 1.3rem;
       text-align: center;
       color: #888;
       font-variant-numeric: tabular-nums;
-      margin-bottom: 1rem;
+      margin-top: 0.3rem;
     }
     .loop-counter {
       text-align: center;
@@ -154,10 +167,21 @@
       text-align: center;
       color: #fff;
       padding: 0.8rem;
-      min-height: 3rem;
+      min-height: 3.6rem;
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+    .action-area {
+      min-height: 13rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .status-text.idle-status {
+      font-size: 2.6rem;
+      font-weight: 500;
+      color: #ff5722;
     }
     .status-text.alert {
       color: #ffeb3b;
@@ -385,7 +409,9 @@
 
     @media only screen and (max-width: 500px) {
       .clock-main { font-size: 4.6rem; }
+      .clock-main.idle { font-size: 1.6rem; }
       .status-text { font-size: 1.4rem; }
+      .status-text.idle-status { font-size: 2rem; }
       .status-text.alert, .status-text.analyse { font-size: 1.9rem; }
       .initial-value { font-size: 1.5rem; }
       .rhythm-button .label-main { font-size: 1.4rem; }
@@ -448,48 +474,54 @@
     </div>
   </section>
 
-  <!-- Panel 2: Sløyfe / valg -->
+  <!-- Panel 2: Sløyfe / valg — fast struktur:
+       (1) klokke-area, (2) statustekst, (3) handlingsknapper -->
   <section class="panel" id="panel-loop">
-    <!-- Idle: rytmevalg -->
-    <div id="rhythm-choice" class="rhythm-buttons">
-      <button class="rhythm-button shockable" id="btn-start-shockable">
-        <span class="label-main">SJOKKBAR</span>
-        <div class="rhythm-sub tool-button">
-          <span class="rhythm-sub-label">VF</span>
-          <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M0 18 L8 18 L12 8 L16 28 L20 12 L24 24 L28 6 L32 26 L36 14 L40 22 L44 10 L48 28 L52 16 L56 8 L60 24 L64 14 L68 26 L72 12 L76 20 L80 6 L84 28 L88 14 L92 22 L96 10 L100 24 L104 16 L108 6 L112 26 L116 12 L120 22 L124 14 L128 24 L132 18 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
-          </svg>
-        </div>
-        <div class="rhythm-sub tool-button">
-          <span class="rhythm-sub-label">VT</span>
-          <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M0 18 L10 18 L14 6 L20 30 L24 18 L34 18 L38 6 L44 30 L48 18 L58 18 L62 6 L68 30 L72 18 L82 18 L86 6 L92 30 L96 18 L106 18 L110 6 L116 30 L120 18 L130 18 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
-          </svg>
-        </div>
-      </button>
-      <button class="rhythm-button non-shockable" id="btn-start-non-shockable">
-        <span class="label-main">IKKE SJOKKBAR</span>
-        <div class="rhythm-sub tool-button">
-          <span class="rhythm-sub-label">PEA</span>
-          <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M0 18 L18 18 Q22 16 24 18 L28 18 L32 10 L36 26 L40 18 L48 18 Q52 16 54 18 L78 18 Q82 16 84 18 L88 18 L92 10 L96 26 L100 18 L108 18 Q112 16 114 18 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
-          </svg>
-        </div>
-        <div class="rhythm-sub tool-button">
-          <span class="rhythm-sub-label">VT</span>
-          <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M0 18 L10 18 L14 6 L20 30 L24 18 L34 18 L38 6 L44 30 L48 18 L58 18 L62 6 L68 30 L72 18 L82 18 L86 6 L92 30 L96 18 L106 18 L110 6 L116 30 L120 18 L130 18 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
-          </svg>
-        </div>
-      </button>
+
+    <!-- (1) Klokke-area -->
+    <div class="loop-clock-area">
+      <div class="loop-counter hidden" id="loop-counter">Sløyfe 1</div>
+      <div class="clock-main idle" id="clock-loop">Koble på elektroder</div>
+      <div class="clock-total hidden" id="clock-total-wrap">Total: <span id="clock-total">0:00</span></div>
     </div>
 
-    <!-- Aktiv sløyfe (skjult initielt) -->
-    <div id="loop-active" class="hidden">
-      <div class="loop-counter" id="loop-counter">Sløyfe 1</div>
-      <div class="clock-main" id="clock-loop">0:00</div>
-      <div class="clock-total">Total: <span id="clock-total">0:00</span></div>
-      <div class="status-text" id="status-text">Fortsett kompresjoner</div>
+    <!-- (2) Hjelpetekst -->
+    <div class="status-text idle-status" id="status-text">Rytmeanalyse</div>
+
+    <!-- (3) Handlingsknapper: rytmevalg ELLER medikamentknapper -->
+    <div class="action-area">
+      <div id="rhythm-choice" class="rhythm-buttons">
+        <button class="rhythm-button shockable" id="btn-start-shockable">
+          <span class="label-main">SJOKKBAR</span>
+          <div class="rhythm-sub tool-button">
+            <span class="rhythm-sub-label">VF</span>
+            <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0 18 L8 18 L12 8 L16 28 L20 12 L24 24 L28 6 L32 26 L36 14 L40 22 L44 10 L48 28 L52 16 L56 8 L60 24 L64 14 L68 26 L72 12 L76 20 L80 6 L84 28 L88 14 L92 22 L96 10 L100 24 L104 16 L108 6 L112 26 L116 12 L120 22 L124 14 L128 24 L132 18 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <div class="rhythm-sub tool-button">
+            <span class="rhythm-sub-label">VT</span>
+            <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0 18 L10 18 L14 6 L20 30 L24 18 L34 18 L38 6 L44 30 L48 18 L58 18 L62 6 L68 30 L72 18 L82 18 L86 6 L92 30 L96 18 L106 18 L110 6 L116 30 L120 18 L130 18 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
+            </svg>
+          </div>
+        </button>
+        <button class="rhythm-button non-shockable" id="btn-start-non-shockable">
+          <span class="label-main">IKKE SJOKKBAR</span>
+          <div class="rhythm-sub tool-button">
+            <span class="rhythm-sub-label">PEA</span>
+            <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0 18 L18 18 Q22 16 24 18 L28 18 L32 10 L36 26 L40 18 L48 18 Q52 16 54 18 L78 18 Q82 16 84 18 L88 18 L92 10 L96 26 L100 18 L108 18 Q112 16 114 18 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <div class="rhythm-sub tool-button">
+            <span class="rhythm-sub-label">Asystole</span>
+            <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M0 18 L30 18 L32 17 L34 19 L60 18 L62 18.5 L64 17.5 L90 18 L92 18 L120 18 L122 18.5 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
+            </svg>
+          </div>
+        </button>
+      </div>
 
       <div id="drug-section" class="drug-section hidden">
         <div class="drug-section-lead" id="drug-section-lead">Vurder medikamenter hvis ikke ROSC</div>
@@ -690,10 +722,10 @@
   const CIRC_CHECK_HOLD_MS = 10_000;
 
   const $rhythmChoice = document.getElementById('rhythm-choice');
-  const $loopActive = document.getElementById('loop-active');
   const $loopCounter = document.getElementById('loop-counter');
   const $clockLoop = document.getElementById('clock-loop');
   const $clockTotal = document.getElementById('clock-total');
+  const $clockTotalWrap = document.getElementById('clock-total-wrap');
   const $statusText = document.getElementById('status-text');
   const $drugSection = document.getElementById('drug-section');
   const $drugLead = document.getElementById('drug-section-lead');
@@ -739,9 +771,17 @@
     }
   });
 
-  function setLoopUiVisible(active) {
-    $rhythmChoice.classList.toggle('hidden', active);
-    $loopActive.classList.toggle('hidden', !active);
+  function setClockActive(active) {
+    $loopCounter.classList.toggle('hidden', !active);
+    $clockTotalWrap.classList.toggle('hidden', !active);
+    $clockLoop.classList.toggle('idle', !active);
+    if (!active) {
+      $clockLoop.textContent = 'Koble på elektroder';
+      $clockLoop.classList.remove('overtime');
+    }
+  }
+  function setRhythmChoiceVisible(visible) {
+    $rhythmChoice.classList.toggle('hidden', !visible);
   }
 
   function startSession(mode) {
@@ -753,7 +793,8 @@
     state.adrenalinGivenInLoop = false;
     state.currentLoopDrugs = [];
     state.loopHistory = [];
-    setLoopUiVisible(true);
+    setClockActive(true);
+    setRhythmChoiceVisible(false);
     requestWakeLock();
     tick();
   }
@@ -775,6 +816,7 @@
     state.loopStartMs = now - overtime;
     state.currentLoopDrugs = [];
     state.adrenalinGivenInLoop = false;
+    setRhythmChoiceVisible(false);
   }
 
   function tick() {
@@ -859,7 +901,7 @@
 
   function setStatus(text, className) {
     $statusText.textContent = text;
-    $statusText.classList.remove('alert', 'analyse');
+    $statusText.classList.remove('alert', 'analyse', 'idle-status');
     if (className) $statusText.classList.add(className);
   }
 
