@@ -181,7 +181,7 @@ export function bloodMTP() {
 
 
 // > 30 kg: RA  3 ml/kg/%brannskade  50%  8 t / 16t
-// < 30 kg: RA/Plasmalyte 3-4 ml/kg/%brannskade  50%  8 t / 16t + 50% av Holliday & Segars formel
+// < 30 kg: RA/Plasmalyte 3 ml/kg/%brannskade  50%  8 t / 16t + 50% av Holliday & Segars formel
 // 0-10 kg 100 ml/kg/døgn, 10-20 kg 50 ml/kg/døgn, 20-30 kg 20 ml/kg/døgn Plasmalyte Glucos
 
 function hsFormula() {
@@ -219,12 +219,12 @@ export function burnPercent(hsArray) {
     else if (_weight > 30) return [{title: 'Parkland: Ringer-Ac.', dose: parkland + ' ml', class: ''},
       {title: 'Hastighet: første 8t / neste 16t', dose: parkland8.toFixed(0) + ' ml/t / ' + parkland16.toFixed(0) + ' ml/t'},
       {title: 'Basalbehov', dose: 'Vanligvis ikke nødvendig'}];
-    else if (_weight > 5) return [{title: 'Parkland: Ringer-Ac./Plasmalyte', dose: parkland + ' - ' + (parkland/3)*4 + ' ml', class: ''},
-            {title: 'Hastighet: første 8t | neste 16t', dose: `${parkland8.toFixed(0)}-${((parkland8/3)*4).toFixed(0)} ml/t | ${parkland16.toFixed(0)}-${((parkland16/3)*4).toFixed(0)} ml/t`},
+    else if (_weight > 5) return [{title: 'Parkland: Ringer-Ac./Plasmalyte', dose: parkland + ' ml', class: ''},
+            {title: 'Hastighet: første 8t | neste 16t', dose: `${parkland8.toFixed(0)} ml/t | ${parkland16.toFixed(0)} ml/t`},
             {title: 'Basalbehov(H&S50%): Plasmalyte Glucos', dose: hollidaySegar50 + ' ml/døgn'},
             {title: 'Hastighet H&S50%', dose: hollidaySegar50p24.toFixed(1) + ' ml/t'}];
-    else return [{title: 'Parkland: Ringer-Ac./Plasmalyte', dose: parkland + ' - ' + (parkland/3)*4 + ' ml', class: ''},
-            {title: 'Hastighet: første 8t | neste 16t', dose: `${parkland8.toFixed(1)}-${((parkland8/3)*4).toFixed(1)} ml/t | ${parkland16.toFixed(1)}-${((parkland16/3)*4).toFixed(1)} ml/t`},
+    else return [{title: 'Parkland: Ringer-Ac./Plasmalyte', dose: parkland + ' ml', class: ''},
+            {title: 'Hastighet: første 8t | neste 16t', dose: `${parkland8.toFixed(1)} ml/t | ${parkland16.toFixed(1)} ml/t`},
             {title: 'Basalbehov(H&S50%): Plasmalyte Glucos', dose: hollidaySegar50 + ' ml/døgn'},
             {title: 'Hastighet H&S50%', dose: hollidaySegar50p24.toFixed(1) + ' ml/t'}];
 }

@@ -640,7 +640,7 @@ class CalculatorView extends LitElement {
         ? html`
 
               <a class="sloyfe-button" href="sloyfe.html?weight=${this._weight || this._estWeight}&ageMonths=${this._ageMonths || ''}">
-                Start sløyfeguide
+                Start sløyfeguide (under utvikling)
               </a>
               <output class="flex big">
                 ${this._cpr.map(item => {
