@@ -181,7 +181,7 @@
     .rosc-area {
       margin-top: 0.8rem;
     }
-    .rosc-btn, .resume-btn {
+    .rosc-btn, .resume-btn, .end-btn {
       width: 100%;
       padding: 1rem;
       font-size: 1.4rem;
@@ -198,6 +198,30 @@
       background-color: #4caf50;
     }
     .rosc-btn:active { background-color: #3a8d3e; }
+    .end-area {
+      margin-top: 2rem;
+      padding: 1rem 0.6rem;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      justify-content: center;
+    }
+    .end-btn {
+      width: 100%;
+      max-width: 28rem;
+      background-color: rgba(120,40,40,0.35);
+      color: #ff8a80;
+      font-size: 1.1rem;
+      padding: 0.9rem 1rem;
+      font-weight: 500;
+      border: 1px solid rgba(255,138,128,0.35);
+      border-radius: 0.5rem;
+      box-shadow: none;
+      letter-spacing: 0.02em;
+    }
+    .end-btn:active {
+      background-color: rgba(120,40,40,0.55);
+      color: #ffb0a8;
+    }
     .resume-btn {
       background-color: #ef5350;
     }
@@ -428,6 +452,7 @@
     .summary-table td.shockable-cell { color: #ef5350; }
     .summary-table td.non-shockable-cell { color: #51b1ff; }
     .summary-table td.rosc-cell { color: #4caf50; font-weight: 500; }
+    .summary-table td.ended-cell { color: #aaa; font-weight: 500; font-style: italic; }
     .summary-empty {
       text-align: center;
       color: #888;
@@ -472,6 +497,7 @@
       .summary-table td.shockable-cell { color: #c00 !important; }
       .summary-table td.non-shockable-cell { color: #06c !important; }
       .summary-table td.rosc-cell { color: #060 !important; }
+      .summary-table td.ended-cell { color: #555 !important; }
     }
   </style>
 </head>
@@ -592,6 +618,11 @@
       <button class="tool-button" id="btn-tool-summary">Oppsummering</button>
     </div>
   </section>
+
+  <!-- Avslutt behandling — separat, helt nederst for å unngå feiltrykk -->
+  <div class="end-area">
+    <button class="end-btn hidden" id="btn-end" type="button">Behandling avsluttet</button>
+  </div>
 
 </main>
 </div>
@@ -770,6 +801,7 @@
   const $drugAdr = document.getElementById('drug-adrenalin');
   const $drugAmi = document.getElementById('drug-amiodaron');
   const $btnRosc = document.getElementById('btn-rosc');
+  const $btnEnd = document.getElementById('btn-end');
   const $btnResume = document.getElementById('btn-resume');
 
   function showAdrenalin(show) {
@@ -826,6 +858,9 @@
   function setRoscButtonVisible(visible) {
     $btnRosc.classList.toggle('hidden', !visible);
   }
+  function setEndButtonVisible(visible) {
+    $btnEnd.classList.toggle('hidden', !visible);
+  }
   function setResumeButtonVisible(visible) {
     $btnResume.classList.toggle('hidden', !visible);
   }
@@ -846,14 +881,15 @@
     setClockActive(true);
     setRhythmChoiceVisible(false);
     setRoscButtonVisible(true);
+    setEndButtonVisible(true);
     setResumeButtonVisible(false);
     requestWakeLock();
     tick();
   }
 
-  function startRosc() {
-    if (state.mode === 'idle' || state.mode === 'rosc') return;
-    // Logg pågående sløyfe i historikken
+  function pauseSession(pauseMode) {
+    // Felles for ROSC og 'ended': logg pågående sløyfe, bytt mode, vis Gjenoppta-knapp.
+    if (state.mode === 'idle' || state.mode === 'rosc' || state.mode === 'ended') return;
     const now = performance.now();
     state.loopHistory.push({
       loopNum: state.loopNumber,
@@ -861,25 +897,28 @@
       durationMs: now - state.loopStartMs,
       drugs: state.currentLoopDrugs
     });
-    state.mode = 'rosc';
-    state.roscStartMs = now;
+    state.mode = pauseMode;
+    state.roscStartMs = now;  // gjenbrukes for både rosc og ended (pause-start)
     state.currentLoopDrugs = [];
-    // UI: skjul rytmevalg, drug-section, ROSC-knapp; vis gjenoppta
     setRhythmChoiceVisible(false);
     showAdrenalin(false);
     showAmiodaron(false);
     updateDrugSectionVisibility();
     setRoscButtonVisible(false);
+    setEndButtonVisible(false);
     setResumeButtonVisible(true);
   }
 
-  function resumeFromRosc() {
-    if (state.mode !== 'rosc') return;
-    // Logg ROSC-perioden i historikken
+  function startRosc() { pauseSession('rosc'); }
+  function endTreatment() { pauseSession('ended'); }
+
+  function resumeFromPause() {
+    if (state.mode !== 'rosc' && state.mode !== 'ended') return;
+    // Logg pause-perioden (rosc eller ended) i historikken
     const now = performance.now();
     state.loopHistory.push({
       loopNum: '—',
-      mode: 'rosc',
+      mode: state.mode,
       durationMs: now - state.roscStartMs,
       drugs: []
     });
@@ -890,10 +929,10 @@
     setStatus('Rytmeanalyse', 'idle-status');
     setRhythmChoiceVisible(true);
     setRoscButtonVisible(false);
+    setEndButtonVisible(false);
     setResumeButtonVisible(false);
-    // Neste rytmevalg vil starte ny sløyfe via startSession (men vi vil beholde loopHistory).
-    // Sett loopNumber slik at neste sløyfe får riktig nummer (etter siste reelle sløyfe + 1).
-    const lastRealLoop = [...state.loopHistory].reverse().find(l => l.mode !== 'rosc');
+    // Sett loopNumber slik at neste sløyfe får riktig nummer (etter siste reelle sløyfe).
+    const lastRealLoop = [...state.loopHistory].reverse().find(l => l.mode !== 'rosc' && l.mode !== 'ended');
     state.loopNumber = lastRealLoop ? lastRealLoop.loopNum : 0;
   }
 
@@ -925,12 +964,13 @@
     const totalElapsed = now - state.totalStartMs;
     $clockTotal.textContent = fmtClock(totalElapsed);
 
-    if (state.mode === 'rosc') {
-      const roscElapsed = now - state.roscStartMs;
-      $clockLoop.textContent = 'ROSC ' + fmtClock(roscElapsed);
+    if (state.mode === 'rosc' || state.mode === 'ended') {
+      const pauseElapsed = now - state.roscStartMs;
+      const isRosc = state.mode === 'rosc';
+      $clockLoop.textContent = (isRosc ? 'ROSC ' : 'Avsluttet ') + fmtClock(pauseElapsed);
       $clockLoop.classList.remove('overtime');
-      $loopCounter.textContent = 'ROSC';
-      setStatus('Postresuscitering — overvåk pasienten', '');
+      $loopCounter.textContent = isRosc ? 'ROSC' : 'Behandling avsluttet';
+      setStatus(isRosc ? 'Postresuscitering — overvåk pasienten' : 'Behandling avsluttet', '');
     } else {
       const loopElapsed = now - state.loopStartMs;
       $clockLoop.textContent = fmtClock(loopElapsed);
@@ -1068,14 +1108,15 @@
     const empty = document.getElementById('summary-empty');
     const meta = document.getElementById('summary-meta');
 
-    // Inkluder pågående sløyfe i oppsummering hvis aktiv
+    // Inkluder pågående sløyfe / pause i oppsummering hvis aktiv
     const allLoops = state.loopHistory.slice();
     if (state.mode !== 'idle') {
+      const isPause = state.mode === 'rosc' || state.mode === 'ended';
       allLoops.push({
-        loopNum: state.loopNumber,
+        loopNum: isPause ? '—' : state.loopNumber,
         mode: state.mode,
-        durationMs: performance.now() - state.loopStartMs,
-        drugs: state.currentLoopDrugs,
+        durationMs: performance.now() - (isPause ? state.roscStartMs : state.loopStartMs),
+        drugs: isPause ? [] : state.currentLoopDrugs,
         ongoing: true
       });
     }
@@ -1100,6 +1141,9 @@
       if (l.mode === 'rosc') {
         rytmeText = 'ROSC' + (l.ongoing ? ' — pågår' : '');
         cellClass = 'rosc-cell';
+      } else if (l.mode === 'ended') {
+        rytmeText = 'Behandling avsluttet' + (l.ongoing ? ' — pågår' : '');
+        cellClass = 'ended-cell';
       } else if (l.mode === 'shockable') {
         rytmeText = 'Sjokkbar (VF/VT)' + (l.ongoing ? ' — pågår' : '');
         cellClass = 'shockable-cell';
@@ -1133,7 +1177,8 @@
     else recordLoopAndStartNext('non-shockable');
   });
   $btnRosc.addEventListener('click', startRosc);
-  $btnResume.addEventListener('click', resumeFromRosc);
+  $btnEnd.addEventListener('click', endTreatment);
+  $btnResume.addEventListener('click', resumeFromPause);
   document.getElementById('btn-given-adr').addEventListener('click', ackAdrenalin);
   document.getElementById('btn-given-ami').addEventListener('click', ackAmiodaron);
 
