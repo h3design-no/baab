@@ -302,20 +302,24 @@
     }
     .tool-button:active { background-color: rgba(255,255,255,0.18); }
 
-    /* Modaler */
+    /* Modaler — plassert nederst på skjermen, uten å dempe resten */
     dialog {
-      background-color: rgba(15,20,40,0.96);
+      background-color: rgba(15,20,40,0.98);
       color: #fff;
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 0.8rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 0.8rem 0.8rem 0 0;
       backdrop-filter: blur(20px);
-      max-width: 90vw;
-      width: 600px;
+      max-width: 100vw;
+      width: 800px;
       padding: 0;
+      margin: 0 auto;
+      margin-bottom: 0;
+      margin-top: auto;
+      box-shadow: 0 -8px 24px rgba(0,0,0,0.5);
     }
     dialog::backdrop {
-      background-color: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
+      background-color: transparent;
+      backdrop-filter: none;
     }
     .modal-header {
       padding: 1rem 1.2rem;
@@ -712,6 +716,7 @@
     rafId: null,
     wakeLock: null,
     amiodaronGiven: 0,           // antall kvitterte amiodaron-doser
+    amiodaronGivenInLoop: false, // amiodaron kvittert i nåværende sløyfe
     adrenalinGivenInLoop: false, // adrenalin kvittert i nåværende sløyfe
     currentLoopDrugs: [],        // [{name, mg, label, ts}] — kvitterte i nåværende sløyfe
     loopHistory: []              // [{loopNum, mode, durationMs, drugs}]
@@ -790,6 +795,7 @@
     state.totalStartMs = performance.now();
     state.loopStartMs = state.totalStartMs;
     state.amiodaronGiven = 0;
+    state.amiodaronGivenInLoop = false;
     state.adrenalinGivenInLoop = false;
     state.currentLoopDrugs = [];
     state.loopHistory = [];
@@ -816,6 +822,7 @@
     state.loopStartMs = now - overtime;
     state.currentLoopDrugs = [];
     state.adrenalinGivenInLoop = false;
+    state.amiodaronGivenInLoop = false;
     setRhythmChoiceVisible(false);
   }
 
@@ -873,7 +880,7 @@
     // og bare hvis ikke allerede kvittert i denne sløyfen.
     if (inDrugWindow && !inAnalysis) {
       showAdrenalin(state.loopNumber >= 2 && !state.adrenalinGivenInLoop);
-      showAmiodaron(state.loopNumber >= 2 && state.amiodaronGiven < 2);
+      showAmiodaron(state.loopNumber >= 2 && state.amiodaronGiven < 2 && !state.amiodaronGivenInLoop);
     } else {
       showAdrenalin(false);
       showAmiodaron(false);
@@ -927,6 +934,7 @@
       ts: performance.now() - state.totalStartMs
     });
     state.amiodaronGiven += 1;
+    state.amiodaronGivenInLoop = true;
     showAmiodaron(false);
     updateDrugSectionVisibility();
   }
