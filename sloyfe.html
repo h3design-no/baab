@@ -175,37 +175,74 @@
       50% { opacity: 0.55; }
     }
 
-    .drug-prompt {
-      padding: 0.8rem 1rem;
-      margin: 0.5rem 0;
-      border-radius: 0.6rem;
-      background-color: rgba(203,160,250,0.18);
-      border: 1px solid #cba0fa;
-      color: #fff;
+    .drug-section {
+      margin: 0.6rem 0 0.2rem 0;
       animation: fadein 0.4s;
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
     }
-    .drug-prompt-text { flex: 1; }
-    .drug-prompt-text .lead {
+    .drug-section-lead {
+      text-align: center;
       font-size: 1.2rem;
+      color: #ddd;
+      margin-bottom: 0.5rem;
     }
-    .drug-prompt-text strong {
-      font-size: 1.5rem;
-      color: #cba0fa;
+    .drug-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .drug-card {
+      width: 100%;
+      padding: 0.7rem 0.9rem;
+      border-radius: 0.6rem;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 0.7rem;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+      animation: fadein 0.4s;
+      box-sizing: border-box;
+    }
+    .drug-card .name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
       display: block;
+    }
+    .drug-card .dose {
+      font-size: 1.05rem;
+      opacity: 0.9;
       margin-top: 0.15rem;
-    }
-    .drug-prompt-text .muted {
-      font-size: 0.95rem;
-      color: #ccc;
       display: block;
-      margin-top: 0.1rem;
     }
-    .drug-prompt button {
+    .drug-card .ml {
+      font-size: 1.9rem;
+      font-weight: 700;
+      text-align: right;
+      white-space: nowrap;
+    }
+    .drug-card .ml-unit {
+      font-size: 1rem;
+      font-weight: 500;
+      opacity: 0.75;
+      margin-left: 0.15rem;
+    }
+    .drug-card.adrenalin {
+      background-color: #cba0fa;
+      color: #1a0033;
+    }
+    .drug-card.amiodaron {
+      background-color: #fff;
+      color: #1a1a1a;
+    }
+    .drug-card .ami-label {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      margin-top: 0.15rem;
+      display: block;
+    }
+    .drug-card-given {
       flex-shrink: 0;
-      padding: 0.9rem 1.1rem;
+      padding: 0.8rem 1.1rem;
       font-size: 1.1rem;
       font-weight: 700;
       color: #fff;
@@ -215,7 +252,7 @@
       cursor: pointer;
       font-family: inherit;
     }
-    .drug-prompt button:active { background-color: #3a8d3e; }
+    .drug-card-given:active { background-color: #3a8d3e; }
     @keyframes fadein {
       from { opacity: 0; transform: translateY(-10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -454,21 +491,27 @@
       <div class="clock-total">Total: <span id="clock-total">0:00</span></div>
       <div class="status-text" id="status-text">Fortsett kompresjoner</div>
 
-      <div id="drug-adrenalin" class="drug-prompt hidden">
-        <div class="drug-prompt-text">
-          <span class="lead">Vurder</span>
-          <strong>Adrenalin <span id="adr-mg">—</span> mg</strong>
-          <span class="muted">(<span id="adr-ml">—</span> ml av 0,1 mg/ml)</span>
+      <div id="drug-section" class="drug-section hidden">
+        <div class="drug-section-lead" id="drug-section-lead">Vurder medikamenter hvis ikke ROSC</div>
+        <div class="drug-buttons">
+          <div id="drug-adrenalin" class="drug-card adrenalin hidden">
+            <span>
+              <span class="name">Adrenalin</span>
+              <span class="dose"><span id="adr-mg">—</span> mg <span style="opacity:0.6;">· 0,1 mg/ml</span></span>
+            </span>
+            <span><span class="ml" id="adr-ml">—</span><span class="ml-unit">ml</span></span>
+            <button class="drug-card-given" id="btn-given-adr" type="button">Gitt</button>
+          </div>
+          <div id="drug-amiodaron" class="drug-card amiodaron hidden">
+            <span>
+              <span class="name">Amiodaron</span>
+              <span class="dose"><span id="ami-mg">—</span> mg <span style="opacity:0.6;">· 50 mg/ml</span></span>
+              <span class="ami-label" id="ami-label">1. dose</span>
+            </span>
+            <span><span class="ml" id="ami-ml">—</span><span class="ml-unit">ml</span></span>
+            <button class="drug-card-given" id="btn-given-ami" type="button">Gitt</button>
+          </div>
         </div>
-        <button id="btn-given-adr" type="button">Gitt</button>
-      </div>
-      <div id="drug-amiodaron" class="drug-prompt hidden">
-        <div class="drug-prompt-text">
-          <span class="lead">Vurder</span>
-          <strong>Amiodaron <span id="ami-mg">—</span> mg</strong>
-          <span class="muted">(<span id="ami-ml">—</span> ml av 50 mg/ml) — <span id="ami-label">1. dose</span></span>
-        </div>
-        <button id="btn-given-ami" type="button">Gitt</button>
       </div>
     </div>
   </section>
@@ -637,6 +680,7 @@
     rafId: null,
     wakeLock: null,
     amiodaronGiven: 0,           // antall kvitterte amiodaron-doser
+    adrenalinGivenInLoop: false, // adrenalin kvittert i nåværende sløyfe
     currentLoopDrugs: [],        // [{name, mg, label, ts}] — kvitterte i nåværende sløyfe
     loopHistory: []              // [{loopNum, mode, durationMs, drugs}]
   };
@@ -651,6 +695,8 @@
   const $clockLoop = document.getElementById('clock-loop');
   const $clockTotal = document.getElementById('clock-total');
   const $statusText = document.getElementById('status-text');
+  const $drugSection = document.getElementById('drug-section');
+  const $drugLead = document.getElementById('drug-section-lead');
   const $drugAdr = document.getElementById('drug-adrenalin');
   const $drugAmi = document.getElementById('drug-amiodaron');
 
@@ -667,6 +713,11 @@
       document.getElementById('ami-ml').textContent = fmtMl(mg / amiConc);
       document.getElementById('ami-label').textContent = isFirstDose ? '1. dose' : '2. og siste dose';
     }
+  }
+  function updateDrugSectionVisibility(leadText) {
+    const anyVisible = !$drugAdr.classList.contains('hidden') || !$drugAmi.classList.contains('hidden');
+    $drugSection.classList.toggle('hidden', !anyVisible);
+    if (anyVisible && leadText) $drugLead.textContent = leadText;
   }
 
   async function requestWakeLock() {
@@ -699,6 +750,7 @@
     state.totalStartMs = performance.now();
     state.loopStartMs = state.totalStartMs;
     state.amiodaronGiven = 0;
+    state.adrenalinGivenInLoop = false;
     state.currentLoopDrugs = [];
     state.loopHistory = [];
     setLoopUiVisible(true);
@@ -722,6 +774,7 @@
     state.loopNumber += 1;
     state.loopStartMs = now - overtime;
     state.currentLoopDrugs = [];
+    state.adrenalinGivenInLoop = false;
   }
 
   function tick() {
@@ -753,37 +806,37 @@
     }
   }
 
+  // Vindu der medikamentknappene er synlige i sjokkbar sløyfe:
+  // fra sirk.sjekk-start (1:00) til 30 sek etter (1:30). Forsvinner deretter automatisk.
+  const SHOCK_DRUG_END_MS = CIRC_CHECK_MS + 30_000;
+
   function updateStatusShockable(elapsed, inAnalysis) {
     const beforeCirc = elapsed < CIRC_CHECK_MS;
     const inCircHold = elapsed >= CIRC_CHECK_MS && elapsed < CIRC_CHECK_MS + CIRC_CHECK_HOLD_MS;
+    const inDrugWindow = elapsed >= CIRC_CHECK_MS && elapsed < SHOCK_DRUG_END_MS;
 
     if (inAnalysis) {
       setStatus('RYTMEANALYSE', 'analyse');
-      showShockableDrugs();
-      return;
-    }
-    if (beforeCirc) {
+    } else if (beforeCirc) {
       const remaining = CIRC_CHECK_MS - elapsed;
       setStatus('Fortsett kompresjoner — sirkulasjonssjekk om ' + fmtClock(remaining), '');
+    } else if (inCircHold) {
+      setStatus('SIRKULASJONSSJEKK', 'alert');
+    } else {
+      const remainingToAnalysis = LOOP_MS - elapsed;
+      setStatus('Fortsett kompresjoner — rytmeanalyse om ' + fmtClock(remainingToAnalysis), '');
+    }
+
+    // Vis medikamentknappene kun i 30-sek-vinduet etter sirk.sjekk, ikke etter rytmeanalyse,
+    // og bare hvis ikke allerede kvittert i denne sløyfen.
+    if (inDrugWindow && !inAnalysis) {
+      showAdrenalin(state.loopNumber >= 2 && !state.adrenalinGivenInLoop);
+      showAmiodaron(state.loopNumber >= 2 && state.amiodaronGiven < 2);
+    } else {
       showAdrenalin(false);
       showAmiodaron(false);
-      return;
     }
-    if (inCircHold) {
-      setStatus('SIRKULASJONSSJEKK', 'alert');
-      showShockableDrugs();
-      return;
-    }
-    const remainingToAnalysis = LOOP_MS - elapsed;
-    setStatus('Fortsett kompresjoner — rytmeanalyse om ' + fmtClock(remainingToAnalysis), '');
-    showShockableDrugs();
-  }
-
-  function showShockableDrugs() {
-    // Adrenalin: fra og med sløyfe 2
-    showAdrenalin(state.loopNumber >= 2);
-    // Amiodaron: fra og med sløyfe 2, men kun dersom færre enn 2 doser er kvittert
-    showAmiodaron(state.loopNumber >= 2 && state.amiodaronGiven < 2);
+    updateDrugSectionVisibility('Vurder medikamenter hvis ikke ROSC');
   }
 
   function updateStatusNonShockable(elapsed, inAnalysis) {
@@ -791,12 +844,9 @@
       setStatus('RYTMEANALYSE', 'analyse');
       showAdrenalin(false);
       showAmiodaron(false);
-      return;
-    }
-    const inFirstMin = elapsed < CIRC_CHECK_MS;
-    if (inFirstMin) {
-      setStatus('Fortsett kompresjoner — gi adrenalin', '');
-      showAdrenalin(true);
+    } else if (elapsed < CIRC_CHECK_MS) {
+      setStatus('Fortsett kompresjoner', '');
+      showAdrenalin(!state.adrenalinGivenInLoop);
       showAmiodaron(false);
     } else {
       const remaining = LOOP_MS - elapsed;
@@ -804,6 +854,7 @@
       showAdrenalin(false);
       showAmiodaron(false);
     }
+    updateDrugSectionVisibility('Vurder adrenalin i løpet av første minutt');
   }
 
   function setStatus(text, className) {
@@ -820,7 +871,9 @@
       label: '',
       ts: performance.now() - state.totalStartMs
     });
+    state.adrenalinGivenInLoop = true;
     showAdrenalin(false);
+    updateDrugSectionVisibility();
   }
   function ackAmiodaron() {
     const isFirstDose = state.amiodaronGiven === 0;
@@ -833,6 +886,7 @@
     });
     state.amiodaronGiven += 1;
     showAmiodaron(false);
+    updateDrugSectionVisibility();
   }
 
   // Modaler
