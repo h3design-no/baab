@@ -63,6 +63,7 @@ class CalculatorView extends LitElement {
   static get properties() {
     return {
       _estWeight: { type: String },
+      _weight: { type: String },
       _calculations: { type: Array },
       _vitals: { type: Array },
       _selectedTab: { type: Number },
@@ -79,6 +80,7 @@ class CalculatorView extends LitElement {
     this.openDialog = this.openDialog.bind(this);
     this.dialogText = null;
     this._estWeight = '15';
+    this._weight = '';
     this._calculations = [];
     this._vitals = [];
     this._airwayOverview = [];
@@ -287,6 +289,7 @@ class CalculatorView extends LitElement {
     const burnPercent = formData.get('burn')
     console.log(months)
 
+    this._weight = weight;
     calc.setAge(age);
     calc.ageMonths(months);
     calc.setWeight(weight);
@@ -632,7 +635,10 @@ class CalculatorView extends LitElement {
               <!-- Tab 3: Stans content -->
               ${this._selectedTab === 2
         ? html`
-              
+
+              <a class="sloyfe-button" href="sloyfe.html?weight=${this._weight || this._estWeight}">
+                Start sløyfeguide
+              </a>
               <output class="flex big">
                 ${this._cpr.map(item => {
           return html`
@@ -1039,6 +1045,25 @@ class CalculatorView extends LitElement {
         }
         figure.cpr figcaption {
           font-size: 0.9rem;
+        }
+        .sloyfe-button {
+          display: block;
+          width: 100%;
+          padding: 1.4rem;
+          margin: 1rem 0 0.5rem 0;
+          font-size: 1.6rem;
+          font-weight: 700;
+          text-align: center;
+          color: #fff;
+          background-color: #ef5350;
+          border-radius: 0.7rem;
+          text-decoration: none;
+          letter-spacing: 0.02em;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+          box-sizing: border-box;
+        }
+        .sloyfe-button:active {
+          background-color: #d63b38;
         }
         footer {
           padding: 2px 8px;

@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=3.0, width=device-width">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>BAAB | Sløyfeguide AHLR</title>
+  <link rel="shortcut icon" href="/media/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="/media/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/media/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/media/favicon-16x16.png">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    #body{
+      padding: 1rem;
+    }
+    main.sloyfe {
+      flex-direction: column;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0.6rem;
+      box-sizing: border-box;
+      color: #fff;
+      gap: 0.6rem;
+      width: 100%;
+    }
+    .panel {
+      width: 100%;
+      /* margin: 1rem !important; */
+      padding: 1rem;
+      background-color: rgba(255,255,255,0.06);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 0.8rem;
+      box-sizing: border-box;
+    }
+
+    /* Panel 1: Initiale tiltak */
+    .initial-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+    .initial-item {
+      padding: 0.6rem 0.8rem;
+      background-color: rgba(100,100,100,0.15);
+      border-radius: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 3.2rem;
+    }
+    .span2{
+      grid-column:span 2;
+    }
+    .initial-item.alert { background-color: rgba(255,235,59,0.12); }
+    .initial-item.joule { background-color: rgba(67,255,67,0.10); }
+    .initial-label {
+      font-size: 1rem;
+      color: #bbb;
+      letter-spacing: 0.02em;
+      text-align: center;
+    }
+    .initial-value {
+      font-size: 2rem;
+      font-weight: 500;
+      color: #fff;
+      margin-top: 0.15rem;
+      text-align: center;
+    }
+    .initial-item.alert .initial-value { color: #ffeb3b; }
+    .initial-item.joule .initial-value { color: #43ff43; }
+
+    /* Panel 2: Sløyfe / valg */
+    .rhythm-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .rhythm-button {
+      width: 100%;
+      padding: 1.1rem 0.8rem;
+      border: none;
+      border-radius: 0.7rem;
+      cursor: pointer;
+      color: #fff;
+      font-family: inherit;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem;
+      align-items: center;
+    }
+    .rhythm-button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .rhythm-button.shockable { background-color: #ef5350; }
+    .rhythm-button.shockable:active { background-color: #d63b38; }
+    .rhythm-button.non-shockable { background-color: #51b1ff; }
+    .rhythm-button.non-shockable:active { background-color: #2a8edc; }
+    .rhythm-button .label-main {
+      grid-column: 1 / -1;
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-align: center;
+    }
+    .rhythm-sub {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .rhythm-sub-label {
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+    .rhythm-sub svg {
+      width: 100%;
+      max-width: 140px;
+      height: 36px;
+    }
+
+    /* Aktiv sløyfe */
+    .clock-main {
+      font-size: 6rem;
+      font-weight: 300;
+      text-align: center;
+      color: #fff;
+      letter-spacing: 0.05em;
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .clock-main.overtime { color: #ff5722; }
+    .clock-total {
+      font-size: 1.3rem;
+      text-align: center;
+      color: #888;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 1rem;
+    }
+    .loop-counter {
+      text-align: center;
+      color: #aaa;
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+    }
+    .status-text {
+      font-size: 1.7rem;
+      font-weight: 500;
+      text-align: center;
+      color: #fff;
+      padding: 0.8rem;
+      min-height: 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .status-text.alert {
+      color: #ffeb3b;
+      font-size: 2.4rem;
+      font-weight: 700;
+      animation: pulse 1s ease-in-out infinite;
+    }
+    .status-text.analyse {
+      color: #ff5722;
+      font-size: 2.4rem;
+      font-weight: 700;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.55; }
+    }
+
+    .drug-prompt {
+      padding: 0.8rem 1rem;
+      margin: 0.5rem 0;
+      border-radius: 0.6rem;
+      background-color: rgba(203,160,250,0.18);
+      border: 1px solid #cba0fa;
+      color: #fff;
+      animation: fadein 0.4s;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .drug-prompt-text { flex: 1; }
+    .drug-prompt-text .lead {
+      font-size: 1.2rem;
+    }
+    .drug-prompt-text strong {
+      font-size: 1.5rem;
+      color: #cba0fa;
+      display: block;
+      margin-top: 0.15rem;
+    }
+    .drug-prompt-text .muted {
+      font-size: 0.95rem;
+      color: #ccc;
+      display: block;
+      margin-top: 0.1rem;
+    }
+    .drug-prompt button {
+      flex-shrink: 0;
+      padding: 0.9rem 1.1rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .drug-prompt button:active { background-color: #3a8d3e; }
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Panel 3: Verktøy */
+    .tool-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+    .tool-button {
+      padding: 0.9rem 0.4rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #fff;
+      background-color: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-family: inherit;
+      text-align: center;
+    }
+    .tool-button:active { background-color: rgba(255,255,255,0.18); }
+
+    /* Modaler */
+    dialog {
+      background-color: rgba(15,20,40,0.96);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 0.8rem;
+      backdrop-filter: blur(20px);
+      max-width: 90vw;
+      width: 600px;
+      padding: 0;
+    }
+    dialog::backdrop {
+      background-color: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+    }
+    .modal-header {
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 500;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 1.6rem;
+      cursor: pointer;
+      padding: 0 0.3rem;
+      font-family: inherit;
+    }
+    .modal-body { padding: 1.2rem; }
+    .modal-footer {
+      padding: 0.8rem 1.2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+    .modal-footer button {
+      padding: 0.7rem 1.2rem;
+      font-size: 1rem;
+      background-color: #51b1ff;
+      color: #fff;
+      border: none;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .dose-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .dose-table th, .dose-table td {
+      padding: 0.6rem 0.5rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .dose-table th { color: #aaa; font-weight: 500; font-size: 0.9rem; }
+    .dose-table td.value { color: #cba0fa; font-weight: 500; }
+
+    .hht-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+    .hht-grid h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+      color: #ffeb3b;
+    }
+    .hht-grid ul {
+      margin: 0;
+      padding-left: 1.2rem;
+      line-height: 1.7;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    .summary-table th, .summary-table td {
+      padding: 0.5rem 0.4rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      vertical-align: top;
+    }
+    .summary-table th { color: #aaa; font-weight: 500; }
+    .summary-table td.shockable-cell { color: #ef5350; }
+    .summary-table td.non-shockable-cell { color: #51b1ff; }
+    .summary-empty {
+      text-align: center;
+      color: #888;
+      padding: 2rem 0;
+    }
+
+    .hidden { display: none !important; }
+
+    @media only screen and (max-width: 500px) {
+      .clock-main { font-size: 4.6rem; }
+      .status-text { font-size: 1.4rem; }
+      .status-text.alert, .status-text.analyse { font-size: 1.9rem; }
+      .initial-value { font-size: 1.5rem; }
+      .rhythm-button .label-main { font-size: 1.4rem; }
+      .rhythm-sub-label { font-size: 0.9rem; }
+      .tool-button { font-size: 1.2rem; padding: 0.8rem 0.3rem; }
+      .hht-grid { grid-template-columns: 1fr; gap: 0.6rem; }
+    }
+
+    /* Print: kun oppsummering */
+    @media print {
+      body { background: #fff; color: #000; }
+      .full-page > main, .full-page > footer, .panel, dialog:not(#dlg-summary) {
+        display: none !important;
+      }
+      dialog#dlg-summary {
+        position: static;
+        display: block !important;
+        background: #fff;
+        color: #000;
+        border: none;
+        max-width: 100%;
+        width: 100%;
+      }
+      dialog#dlg-summary::backdrop { display: none; }
+      .modal-header, .modal-footer { border-color: #999 !important; }
+      .modal-close, .modal-footer button { display: none; }
+      .summary-table th, .summary-table td { border-bottom: 1px solid #999 !important; color: #000 !important; }
+      .summary-table th { color: #555 !important; }
+      .summary-table td.shockable-cell { color: #c00 !important; }
+      .summary-table td.non-shockable-cell { color: #06c !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="full-page">
+<main class="sloyfe" id="body">
+
+  <!-- Panel 1: Initiale tiltak -->
+  <section class="panel" id="panel-initial">
+    <div class="initial-grid">
+      <div class="initial-item span2">
+        <!-- <span class="initial-label">Først</span> -->
+        <span class="initial-value">Tilkall hjelp</span>
+      </div>
+      <div class="initial-item span2">
+        <span class="initial-label">Luftvei</span>
+        <span class="initial-value">5 ventilasjoner</span>
+      </div>
+      <div class="initial-item">
+        <span class="initial-label">Start HLR</span>
+        <span class="initial-value">15 : 2</span>
+      </div>
+      <div class="initial-item joule">
+        <span class="initial-label">Defibrillering (4 J/kg)</span>
+        <span class="initial-value" id="joule-display">— J</span>
+      </div>
+    </div>
+    <div id="weight-warning" class="hidden" style="margin-top: 0.8rem; padding: 0.8rem; background-color: rgba(255,87,34,0.2); border: 1px solid #ff5722; border-radius: 0.5rem; color: #ff8a65; text-align: center;">
+      Vekt er ikke satt. Gå tilbake og angi vekt på hovedsiden først.
+    </div>
+  </section>
+
+  <!-- Panel 2: Sløyfe / valg -->
+  <section class="panel" id="panel-loop">
+    <!-- Idle: rytmevalg -->
+    <div id="rhythm-choice" class="rhythm-buttons">
+      <button class="rhythm-button shockable" id="btn-start-shockable">
+        <span class="label-main">SJOKKBAR</span>
+        <div class="rhythm-sub tool-button">
+          <span class="rhythm-sub-label">VF</span>
+          <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 18 L8 18 L12 8 L16 28 L20 12 L24 24 L28 6 L32 26 L36 14 L40 22 L44 10 L48 28 L52 16 L56 8 L60 24 L64 14 L68 26 L72 12 L76 20 L80 6 L84 28 L88 14 L92 22 L96 10 L100 24 L104 16 L108 6 L112 26 L116 12 L120 22 L124 14 L128 24 L132 18 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
+          </svg>
+        </div>
+        <div class="rhythm-sub tool-button">
+          <span class="rhythm-sub-label">VT</span>
+          <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 18 L10 18 L14 6 L20 30 L24 18 L34 18 L38 6 L44 30 L48 18 L58 18 L62 6 L68 30 L72 18 L82 18 L86 6 L92 30 L96 18 L106 18 L110 6 L116 30 L120 18 L130 18 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
+          </svg>
+        </div>
+      </button>
+      <button class="rhythm-button non-shockable" id="btn-start-non-shockable">
+        <span class="label-main">IKKE SJOKKBAR</span>
+        <div class="rhythm-sub tool-button">
+          <span class="rhythm-sub-label">PEA</span>
+          <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 18 L18 18 Q22 16 24 18 L28 18 L32 10 L36 26 L40 18 L48 18 Q52 16 54 18 L78 18 Q82 16 84 18 L88 18 L92 10 L96 26 L100 18 L108 18 Q112 16 114 18 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
+          </svg>
+        </div>
+        <div class="rhythm-sub tool-button">
+          <span class="rhythm-sub-label">VT</span>
+          <svg viewBox="0 0 140 36" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 18 L10 18 L14 6 L20 30 L24 18 L34 18 L38 6 L44 30 L48 18 L58 18 L62 6 L68 30 L72 18 L82 18 L86 6 L92 30 L96 18 L106 18 L110 6 L116 30 L120 18 L130 18 L140 18" fill="none" stroke="#fff" stroke-width="1.6"/>
+          </svg>
+        </div>
+      </button>
+    </div>
+
+    <!-- Aktiv sløyfe (skjult initielt) -->
+    <div id="loop-active" class="hidden">
+      <div class="loop-counter" id="loop-counter">Sløyfe 1</div>
+      <div class="clock-main" id="clock-loop">0:00</div>
+      <div class="clock-total">Total: <span id="clock-total">0:00</span></div>
+      <div class="status-text" id="status-text">Fortsett kompresjoner</div>
+
+      <div id="drug-adrenalin" class="drug-prompt hidden">
+        <div class="drug-prompt-text">
+          <span class="lead">Vurder</span>
+          <strong>Adrenalin <span id="adr-mg">—</span> mg</strong>
+          <span class="muted">(<span id="adr-ml">—</span> ml av 0,1 mg/ml)</span>
+        </div>
+        <button id="btn-given-adr" type="button">Gitt</button>
+      </div>
+      <div id="drug-amiodaron" class="drug-prompt hidden">
+        <div class="drug-prompt-text">
+          <span class="lead">Vurder</span>
+          <strong>Amiodaron <span id="ami-mg">—</span> mg</strong>
+          <span class="muted">(<span id="ami-ml">—</span> ml av 50 mg/ml) — <span id="ami-label">1. dose</span></span>
+        </div>
+        <button id="btn-given-ami" type="button">Gitt</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Panel 3: Verktøy -->
+  <section class="panel" id="panel-tools">
+    <div class="tool-buttons">
+      <button class="tool-button" id="btn-tool-meds">Medikamentdoser</button>
+      <button class="tool-button" id="btn-tool-hht">4H og 4T</button>
+      <button class="tool-button" id="btn-tool-summary">Oppsummering</button>
+    </div>
+  </section>
+
+</main>
+</div>
+
+<!-- Modaler -->
+<dialog id="dlg-meds">
+  <div class="modal-header">
+    <h2>Medikamentdoser</h2>
+    <button class="modal-close" data-close="dlg-meds" aria-label="Lukk">&times;</button>
+  </div>
+  <div class="modal-body">
+    <table class="dose-table">
+      <thead>
+        <tr><th>Medikament</th><th>Dose</th><th>Volum</th><th>Når</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Adrenalin (0,1 mg/ml)</td>
+          <td class="value" id="meds-adr-mg">— mg</td>
+          <td class="value" id="meds-adr-ml">— ml</td>
+          <td>VF/VT: etter 2 mislykkede sjokk, deretter hver 3. min<br>PEA/asystole: i løpet av 1. min, deretter hver 3. min</td>
+        </tr>
+        <tr>
+          <td>Amiodaron (50 mg/ml) — 1. dose</td>
+          <td class="value" id="meds-ami1-mg">— mg</td>
+          <td class="value" id="meds-ami1-ml">— ml</td>
+          <td>Etter 2 mislykkede sjokk</td>
+        </tr>
+        <tr>
+          <td>Amiodaron (50 mg/ml) — 2. og siste dose</td>
+          <td class="value" id="meds-ami2-mg">— mg</td>
+          <td class="value" id="meds-ami2-ml">— ml</td>
+          <td>Etter 3 mislykkede sjokk</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button data-close="dlg-meds">Lukk</button>
+  </div>
+</dialog>
+
+<dialog id="dlg-hht">
+  <div class="modal-header">
+    <h2>Reversible årsaker — 4H og 4T</h2>
+    <button class="modal-close" data-close="dlg-hht" aria-label="Lukk">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="hht-grid">
+      <div>
+        <h3>4 H</h3>
+        <ul>
+          <li>Hypoksi</li>
+          <li>Hypovolemi</li>
+          <li>Hypo-/hyperkalemi, -kalsemi, -magnesemi, -glykemi</li>
+          <li>Hypotermi</li>
+        </ul>
+      </div>
+      <div>
+        <h3>4 T</h3>
+        <ul>
+          <li>Tensjonspneumothorax</li>
+          <li>Tamponade</li>
+          <li>Trombose (hjerte og lunge)</li>
+          <li>Toksiner</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button data-close="dlg-hht">Lukk</button>
+  </div>
+</dialog>
+
+<dialog id="dlg-summary">
+  <div class="modal-header">
+    <h2>Oppsummering av prosedyren</h2>
+    <button class="modal-close" data-close="dlg-summary" aria-label="Lukk">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div id="summary-meta" style="margin-bottom: 0.8rem; color: #aaa; font-size: 0.95rem;"></div>
+    <table class="summary-table" id="summary-table">
+      <thead>
+        <tr><th>#</th><th>Rytme</th><th>Varighet</th><th>Medikamenter gitt</th></tr>
+      </thead>
+      <tbody id="summary-tbody"></tbody>
+    </table>
+    <div id="summary-empty" class="summary-empty hidden">Ingen sløyfer registrert ennå.</div>
+  </div>
+  <div class="modal-footer">
+    <button data-close="dlg-summary">Lukk</button>
+    <button id="btn-print-summary">Skriv ut / Lagre som PDF</button>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  'use strict';
+
+  const params = new URLSearchParams(window.location.search);
+  const weight = parseFloat(params.get('weight'));
+  const hasWeight = !isNaN(weight) && weight > 0;
+
+  const joule = hasWeight ? Math.min(Math.round(weight * 4), 200) : null;
+  const adrMg = hasWeight ? Math.min(weight * 0.01, 1) : null;
+  const adrMl = hasWeight ? adrMg / 0.1 : null;
+  const ami1Mg = hasWeight ? Math.min(weight * 5, 300) : null;
+  const ami2Mg = hasWeight ? Math.min(weight * 5, 150) : null;
+  const amiConc = 50;
+
+  function fmtMg(v) {
+    if (v == null) return '—';
+    if (v < 1) return v.toFixed(2).replace('.', ',');
+    if (v < 10) return v.toFixed(1).replace('.', ',');
+    return Math.round(v).toString();
+  }
+  function fmtMl(v) {
+    if (v == null) return '—';
+    if (v < 1) return v.toFixed(2).replace('.', ',');
+    return v.toFixed(1).replace('.', ',');
+  }
+  function fmtClock(ms) {
+    if (ms < 0) ms = 0;
+    const totalSec = Math.floor(ms / 1000);
+    const m = Math.floor(totalSec / 60);
+    const s = totalSec % 60;
+    return m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  // Initielt panel 1
+  if (hasWeight) {
+    document.getElementById('joule-display').textContent = joule + ' J';
+    document.getElementById('adr-mg').textContent = fmtMg(adrMg);
+    document.getElementById('adr-ml').textContent = fmtMl(adrMl);
+    // Doseringsmodal
+    document.getElementById('meds-adr-mg').textContent = fmtMg(adrMg) + ' mg';
+    document.getElementById('meds-adr-ml').textContent = fmtMl(adrMl) + ' ml';
+    document.getElementById('meds-ami1-mg').textContent = fmtMg(ami1Mg) + ' mg';
+    document.getElementById('meds-ami1-ml').textContent = fmtMl(ami1Mg / amiConc) + ' ml';
+    document.getElementById('meds-ami2-mg').textContent = fmtMg(ami2Mg) + ' mg';
+    document.getElementById('meds-ami2-ml').textContent = fmtMl(ami2Mg / amiConc) + ' ml';
+  } else {
+    document.getElementById('weight-warning').classList.remove('hidden');
+    document.getElementById('btn-start-shockable').disabled = true;
+    document.getElementById('btn-start-non-shockable').disabled = true;
+  }
+
+  // Tilstand
+  const state = {
+    mode: 'idle',
+    loopNumber: 0,
+    loopStartMs: null,
+    totalStartMs: null,
+    rafId: null,
+    wakeLock: null,
+    amiodaronGiven: 0,           // antall kvitterte amiodaron-doser
+    currentLoopDrugs: [],        // [{name, mg, label, ts}] — kvitterte i nåværende sløyfe
+    loopHistory: []              // [{loopNum, mode, durationMs, drugs}]
+  };
+
+  const LOOP_MS = 180_000;
+  const CIRC_CHECK_MS = 60_000;
+  const CIRC_CHECK_HOLD_MS = 10_000;
+
+  const $rhythmChoice = document.getElementById('rhythm-choice');
+  const $loopActive = document.getElementById('loop-active');
+  const $loopCounter = document.getElementById('loop-counter');
+  const $clockLoop = document.getElementById('clock-loop');
+  const $clockTotal = document.getElementById('clock-total');
+  const $statusText = document.getElementById('status-text');
+  const $drugAdr = document.getElementById('drug-adrenalin');
+  const $drugAmi = document.getElementById('drug-amiodaron');
+
+  function showAdrenalin(show) {
+    $drugAdr.classList.toggle('hidden', !show);
+  }
+  function showAmiodaron(show) {
+    $drugAmi.classList.toggle('hidden', !show);
+    if (show) {
+      // Doseringen baseres på antall kvitterte doser, ikke på sløyfenummer.
+      const isFirstDose = state.amiodaronGiven === 0;
+      const mg = isFirstDose ? ami1Mg : ami2Mg;
+      document.getElementById('ami-mg').textContent = fmtMg(mg);
+      document.getElementById('ami-ml').textContent = fmtMl(mg / amiConc);
+      document.getElementById('ami-label').textContent = isFirstDose ? '1. dose' : '2. og siste dose';
+    }
+  }
+
+  async function requestWakeLock() {
+    try {
+      if ('wakeLock' in navigator) {
+        state.wakeLock = await navigator.wakeLock.request('screen');
+      }
+    } catch (e) { /* ignorer */ }
+  }
+  function releaseWakeLock() {
+    if (state.wakeLock) {
+      state.wakeLock.release().catch(() => {});
+      state.wakeLock = null;
+    }
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && state.mode !== 'idle' && !state.wakeLock) {
+      requestWakeLock();
+    }
+  });
+
+  function setLoopUiVisible(active) {
+    $rhythmChoice.classList.toggle('hidden', active);
+    $loopActive.classList.toggle('hidden', !active);
+  }
+
+  function startSession(mode) {
+    state.mode = mode;
+    state.loopNumber = 1;
+    state.totalStartMs = performance.now();
+    state.loopStartMs = state.totalStartMs;
+    state.amiodaronGiven = 0;
+    state.currentLoopDrugs = [];
+    state.loopHistory = [];
+    setLoopUiVisible(true);
+    requestWakeLock();
+    tick();
+  }
+
+  function recordLoopAndStartNext(mode) {
+    const now = performance.now();
+    const previousElapsed = now - state.loopStartMs;
+    // Lagre forrige sløyfe i historikken
+    state.loopHistory.push({
+      loopNum: state.loopNumber,
+      mode: state.mode,
+      durationMs: previousElapsed,
+      drugs: state.currentLoopDrugs
+    });
+    // Tidskompensasjon: overfør overtid til neste sløyfe
+    const overtime = Math.max(0, previousElapsed - LOOP_MS);
+    state.mode = mode;
+    state.loopNumber += 1;
+    state.loopStartMs = now - overtime;
+    state.currentLoopDrugs = [];
+  }
+
+  function tick() {
+    if (state.mode === 'idle') return;
+
+    const now = performance.now();
+    const loopElapsed = now - state.loopStartMs;
+    const totalElapsed = now - state.totalStartMs;
+
+    $clockLoop.textContent = fmtClock(loopElapsed);
+    $clockTotal.textContent = fmtClock(totalElapsed);
+    $loopCounter.textContent = 'Sløyfe ' + state.loopNumber;
+    $clockLoop.classList.toggle('overtime', loopElapsed >= LOOP_MS);
+
+    updateStatus(loopElapsed);
+
+    state.rafId = requestAnimationFrame(tick);
+  }
+
+  function updateStatus(elapsed) {
+    const inAnalysis = elapsed >= LOOP_MS;
+    // Når i rytmeanalyse, vis rytmevalg-knappene som overlay over sløyfa
+    $rhythmChoice.classList.toggle('hidden', !inAnalysis);
+
+    if (state.mode === 'shockable') {
+      updateStatusShockable(elapsed, inAnalysis);
+    } else if (state.mode === 'non-shockable') {
+      updateStatusNonShockable(elapsed, inAnalysis);
+    }
+  }
+
+  function updateStatusShockable(elapsed, inAnalysis) {
+    const beforeCirc = elapsed < CIRC_CHECK_MS;
+    const inCircHold = elapsed >= CIRC_CHECK_MS && elapsed < CIRC_CHECK_MS + CIRC_CHECK_HOLD_MS;
+
+    if (inAnalysis) {
+      setStatus('RYTMEANALYSE', 'analyse');
+      showShockableDrugs();
+      return;
+    }
+    if (beforeCirc) {
+      const remaining = CIRC_CHECK_MS - elapsed;
+      setStatus('Fortsett kompresjoner — sirkulasjonssjekk om ' + fmtClock(remaining), '');
+      showAdrenalin(false);
+      showAmiodaron(false);
+      return;
+    }
+    if (inCircHold) {
+      setStatus('SIRKULASJONSSJEKK', 'alert');
+      showShockableDrugs();
+      return;
+    }
+    const remainingToAnalysis = LOOP_MS - elapsed;
+    setStatus('Fortsett kompresjoner — rytmeanalyse om ' + fmtClock(remainingToAnalysis), '');
+    showShockableDrugs();
+  }
+
+  function showShockableDrugs() {
+    // Adrenalin: fra og med sløyfe 2
+    showAdrenalin(state.loopNumber >= 2);
+    // Amiodaron: fra og med sløyfe 2, men kun dersom færre enn 2 doser er kvittert
+    showAmiodaron(state.loopNumber >= 2 && state.amiodaronGiven < 2);
+  }
+
+  function updateStatusNonShockable(elapsed, inAnalysis) {
+    if (inAnalysis) {
+      setStatus('RYTMEANALYSE', 'analyse');
+      showAdrenalin(false);
+      showAmiodaron(false);
+      return;
+    }
+    const inFirstMin = elapsed < CIRC_CHECK_MS;
+    if (inFirstMin) {
+      setStatus('Fortsett kompresjoner — gi adrenalin', '');
+      showAdrenalin(true);
+      showAmiodaron(false);
+    } else {
+      const remaining = LOOP_MS - elapsed;
+      setStatus('Fortsett kompresjoner — rytmeanalyse om ' + fmtClock(remaining), '');
+      showAdrenalin(false);
+      showAmiodaron(false);
+    }
+  }
+
+  function setStatus(text, className) {
+    $statusText.textContent = text;
+    $statusText.classList.remove('alert', 'analyse');
+    if (className) $statusText.classList.add(className);
+  }
+
+  // Kvitteringer
+  function ackAdrenalin() {
+    state.currentLoopDrugs.push({
+      name: 'Adrenalin',
+      mg: adrMg,
+      label: '',
+      ts: performance.now() - state.totalStartMs
+    });
+    showAdrenalin(false);
+  }
+  function ackAmiodaron() {
+    const isFirstDose = state.amiodaronGiven === 0;
+    const mg = isFirstDose ? ami1Mg : ami2Mg;
+    state.currentLoopDrugs.push({
+      name: 'Amiodaron',
+      mg: mg,
+      label: isFirstDose ? '1. dose' : '2. og siste dose',
+      ts: performance.now() - state.totalStartMs
+    });
+    state.amiodaronGiven += 1;
+    showAmiodaron(false);
+  }
+
+  // Modaler
+  function openDialog(id) {
+    const d = document.getElementById(id);
+    if (id === 'dlg-summary') renderSummary();
+    if (typeof d.showModal === 'function') d.showModal();
+    else d.setAttribute('open', '');
+  }
+  function closeDialog(id) {
+    const d = document.getElementById(id);
+    if (typeof d.close === 'function') d.close();
+    else d.removeAttribute('open');
+  }
+  // Lukk ved klikk på backdrop
+  document.querySelectorAll('dialog').forEach(d => {
+    d.addEventListener('click', (e) => {
+      const rect = d.getBoundingClientRect();
+      const inDialog = e.clientX >= rect.left && e.clientX <= rect.right
+                     && e.clientY >= rect.top && e.clientY <= rect.bottom;
+      if (!inDialog) closeDialog(d.id);
+    });
+  });
+  document.querySelectorAll('[data-close]').forEach(b => {
+    b.addEventListener('click', () => closeDialog(b.getAttribute('data-close')));
+  });
+
+  function renderSummary() {
+    const tbody = document.getElementById('summary-tbody');
+    const empty = document.getElementById('summary-empty');
+    const meta = document.getElementById('summary-meta');
+
+    // Inkluder pågående sløyfe i oppsummering hvis aktiv
+    const allLoops = state.loopHistory.slice();
+    if (state.mode !== 'idle') {
+      allLoops.push({
+        loopNum: state.loopNumber,
+        mode: state.mode,
+        durationMs: performance.now() - state.loopStartMs,
+        drugs: state.currentLoopDrugs,
+        ongoing: true
+      });
+    }
+
+    tbody.innerHTML = '';
+    if (allLoops.length === 0) {
+      empty.classList.remove('hidden');
+      meta.textContent = '';
+      return;
+    }
+    empty.classList.add('hidden');
+
+    const totalMs = state.totalStartMs ? performance.now() - state.totalStartMs : 0;
+    const dateStr = new Date().toLocaleString('no-NO');
+    meta.textContent = 'Vekt: ' + (hasWeight ? weight + ' kg' : '—') + ' · '
+                      + 'Total tid: ' + fmtClock(totalMs) + ' · '
+                      + 'Tidspunkt: ' + dateStr;
+
+    for (const l of allLoops) {
+      const tr = document.createElement('tr');
+      const isShock = l.mode === 'shockable';
+      const rytmeText = (isShock ? 'Sjokkbar (VF/VT)' : 'Ikke sjokkbar (PEA/asystole)') + (l.ongoing ? ' — pågår' : '');
+      const drugsText = l.drugs.length === 0
+        ? '—'
+        : l.drugs.map(d => {
+            const time = fmtClock(d.ts);
+            const label = d.label ? ' (' + d.label + ')' : '';
+            return d.name + ' ' + fmtMg(d.mg) + ' mg' + label + ' @ ' + time;
+          }).join('; ');
+
+      tr.innerHTML = '<td>' + l.loopNum + '</td>'
+                   + '<td class="' + (isShock ? 'shockable-cell' : 'non-shockable-cell') + '">' + rytmeText + '</td>'
+                   + '<td>' + fmtClock(l.durationMs) + '</td>'
+                   + '<td>' + drugsText + '</td>';
+      tbody.appendChild(tr);
+    }
+  }
+
+  // Event listeners
+  document.getElementById('btn-start-shockable').addEventListener('click', () => {
+    if (state.mode === 'idle') startSession('shockable');
+    else recordLoopAndStartNext('shockable');
+  });
+  document.getElementById('btn-start-non-shockable').addEventListener('click', () => {
+    if (state.mode === 'idle') startSession('non-shockable');
+    else recordLoopAndStartNext('non-shockable');
+  });
+  document.getElementById('btn-given-adr').addEventListener('click', ackAdrenalin);
+  document.getElementById('btn-given-ami').addEventListener('click', ackAmiodaron);
+
+  document.getElementById('btn-tool-meds').addEventListener('click', () => openDialog('dlg-meds'));
+  document.getElementById('btn-tool-hht').addEventListener('click', () => openDialog('dlg-hht'));
+  document.getElementById('btn-tool-summary').addEventListener('click', () => openDialog('dlg-summary'));
+  document.getElementById('btn-print-summary').addEventListener('click', () => window.print());
+
+  if (typeof navigator.serviceWorker !== 'undefined') {
+    navigator.serviceWorker.register('service-worker.js');
+  }
+})();
+</script>
+</body>
+</html>
