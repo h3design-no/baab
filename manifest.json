@@ -1,34 +1,38 @@
 {
-  "name": "BarneAnestesi & AkutttBehandling",
+  "name": "BarneAnestesi & AkuttBehandling",
   "lang": "no",
   "short_name": "BAAB",
-  "description": "...",
-  "start_url": "/",
-  "scope": "/",
+  "description": "Pediatrisk dose- og parameterkalkulator for anestesi og akuttbehandling.",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "theme_color": "#252525",
-  "background_color": "#252525",
+  "theme_color": "#000000",
+  "background_color": "#000000",
   "orientation": "any",
-  "icons":[
+  "icons": [
     {
-      "src":"/android-chrome-192x192.png",
-      "sizes":"192x192","type":"image/png"
+      "src": "media/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src":"/android-chrome-512x512.png","sizes":"512x512","type":"image/png"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "screenshots/1280x800-screenshot.png",
-      "sizes": "1280x800",
-      "type": "image/png"
+      "src": "media/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "screenshots/750x1334-screenshot.png",
-      "sizes": "750x1334",
-      "type": "image/png"
+      "src": "media/maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "media/maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
-
